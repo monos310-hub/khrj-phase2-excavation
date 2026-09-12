@@ -1,0 +1,986 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="لوحة متابعة يومية لإنجاز الحفر — مشروع شبكات الصرف الصحي، حوطة بني تميم والخرج، المرحلة الثانية.">
+<meta name="color-scheme" content="light dark">
+<meta name="robots" content="noindex,nofollow">
+<meta property="og:title" content="رصد حفر بني تميم والخرج — المرحلة الثانية">
+<meta property="og:description" content="متابعة يومية لإنجاز الحفر مع توقعات التسليم وعتبات الإنذار ومواضع الخطر.">
+<style>body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>رصد حفر بني تميم والخرج</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#F6F3EE; --surf:#FFFFFF; --surf2:#EFEAE1; --surf3:#E5DED2;
+  --ink:#1A1713; --ink2:#6B6156; --ink3:#8E8477;
+  --line:#DED6C9; --line2:#CBC0AF;
+  --acc:#0A5C5E; --acc-ink:#FFFFFF; --acc-soft:#DCEBEA;
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+  --good-bg:#E4F4E4; --warn-bg:#FCF1D9; --crit-bg:#F9E3E3; --serious-bg:#FBEBE3;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a;
+  --grid:#E7E0D4;
+  --shadow:0 1px 2px rgba(40,32,20,.06),0 4px 14px rgba(40,32,20,.05);
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#14120F; --surf:#1E1B17; --surf2:#272320; --surf3:#322D28;
+  --ink:#F2EDE4; --ink2:#A89C8C; --ink3:#877C6D;
+  --line:#332F29; --line2:#443E36;
+  --acc:#5CB8B6; --acc-ink:#0A1F20; --acc-soft:#16302F;
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+  --good-bg:#122612; --warn-bg:#2C2411; --crit-bg:#2E1615; --serious-bg:#2C1C14;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --grid:#2B2722;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25);
+  color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#14120F; --surf:#1E1B17; --surf2:#272320; --surf3:#322D28;
+  --ink:#F2EDE4; --ink2:#A89C8C; --ink3:#877C6D;
+  --line:#332F29; --line2:#443E36;
+  --acc:#5CB8B6; --acc-ink:#0A1F20; --acc-soft:#16302F;
+  --good:#0ca30c; --warn:#fab219; --serious:#ec835a; --crit:#d03b3b;
+  --good-bg:#122612; --warn-bg:#2C2411; --crit-bg:#2E1615; --serious-bg:#2C1C14;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70;
+  --grid:#2B2722;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.25);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{direction:rtl}
+body{
+  background:var(--bg); color:var(--ink);
+  font-family:"IBM Plex Sans Arabic",-apple-system,"Segoe UI",Tahoma,sans-serif;
+  font-size:15px; line-height:1.6; margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:"Readex Pro","IBM Plex Sans Arabic",sans-serif;font-weight:600;margin:0;text-wrap:balance;line-height:1.3}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum" 1}
+.wrap{max-width:1240px;margin:0 auto;padding-inline:18px;padding-block:0 64px}
+
+/* ---- header ---- */
+.top{border-bottom:1px solid var(--line);background:var(--surf);position:sticky;top:0;z-index:40}
+.top-in{max-width:1240px;margin:0 auto;padding:14px 18px;display:flex;flex-wrap:wrap;gap:14px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:center;gap:12px;min-width:0}
+.mark{width:34px;height:34px;flex:0 0 34px;border-radius:7px;background:var(--acc);display:grid;place-items:center}
+.mark svg{width:20px;height:20px;display:block}
+.brand h1{font-size:16px;letter-spacing:-.01em}
+.brand p{margin:1px 0 0;font-size:11.5px;color:var(--ink2);letter-spacing:.02em}
+.cd{display:flex;gap:8px;align-items:center}
+.cd-box{background:var(--crit-bg);border:1px solid color-mix(in srgb,var(--crit) 32%,transparent);border-radius:8px;padding:5px 12px;text-align:center}
+.cd-box b{display:block;font-family:"Readex Pro",sans-serif;font-size:19px;line-height:1.1;color:var(--crit)}
+.cd-box span{font-size:10.5px;color:var(--ink2);letter-spacing:.03em}
+.ghost{background:var(--surf2);border:1px solid var(--line);color:var(--ink2);border-radius:8px;padding:7px 10px;font:inherit;font-size:12.5px;cursor:pointer}
+.ghost:hover{border-color:var(--line2);color:var(--ink)}
+
+/* ---- verdict ---- */
+.verdict{margin-top:20px;background:var(--surf);border:1px solid var(--line);border-radius:14px;overflow:hidden;box-shadow:var(--shadow)}
+.verdict-bar{height:4px;background:linear-gradient(90deg,var(--crit),var(--serious))}
+.verdict-in{padding:20px 22px;display:grid;grid-template-columns:1fr auto;gap:22px;align-items:start}
+.vtag{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:600;letter-spacing:.05em;color:var(--crit);background:var(--crit-bg);border:1px solid color-mix(in srgb,var(--crit) 30%,transparent);padding:3px 9px;border-radius:20px}
+.verdict h2{font-size:21px;margin:10px 0 8px;letter-spacing:-.015em}
+.verdict p{margin:0;color:var(--ink2);font-size:14px;max-width:70ch}
+.verdict p strong{color:var(--ink);font-weight:600}
+.gapbox{text-align:center;border-inline-start:1px solid var(--line);padding-inline-start:22px;min-width:130px}
+.gapbox b{display:block;font-family:"Readex Pro",sans-serif;font-size:40px;line-height:1;color:var(--crit);letter-spacing:-.03em}
+.gapbox span{font-size:11.5px;color:var(--ink2);display:block;margin-top:5px;line-height:1.45}
+
+/* ---- kpis ---- */
+.kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin-top:14px}
+.kpi{background:var(--surf);padding:13px 14px 14px}
+.kpi .k{font-size:11px;color:var(--ink2);letter-spacing:.02em;display:block;margin-bottom:5px}
+.kpi .v{font-family:"Readex Pro",sans-serif;font-size:23px;line-height:1.1;letter-spacing:-.02em;display:block}
+.kpi .u{font-size:11px;color:var(--ink3);font-family:"IBM Plex Sans Arabic",sans-serif;font-weight:400}
+.kpi .s{font-size:11px;margin-top:5px;display:flex;align-items:center;gap:4px}
+.dot{width:7px;height:7px;border-radius:50%;flex:0 0 7px}
+.c-crit{color:var(--crit)} .c-warn{color:#9a6c05} .c-good{color:#0a7d0a} .c-ser{color:#b85f35}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .c-warn{color:var(--warn)}:root:not([data-theme="light"]) .c-good{color:#2bc32b}:root:not([data-theme="light"]) .c-ser{color:var(--serious)}}
+:root[data-theme="dark"] .c-warn{color:var(--warn)}
+:root[data-theme="dark"] .c-good{color:#2bc32b}
+:root[data-theme="dark"] .c-ser{color:var(--serious)}
+.bg-crit{background:var(--crit)} .bg-warn{background:var(--warn)} .bg-good{background:var(--good)} .bg-ser{background:var(--serious)}
+
+/* ---- tabs ---- */
+.tabs{display:flex;gap:2px;margin:22px 0 0;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:0;border-bottom:2px solid transparent;padding:10px 14px;font:inherit;font-size:14px;font-weight:500;color:var(--ink2);cursor:pointer;white-space:nowrap;margin-bottom:-1px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--acc);border-bottom-color:var(--acc);font-weight:600}
+.tab:focus-visible,.ghost:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.panel{padding-top:20px}
+
+/* ---- cards ---- */
+.card{background:var(--surf);border:1px solid var(--line);border-radius:12px;box-shadow:var(--shadow)}
+.card-h{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.card-h h3{font-size:15px}
+.card-h .hint{font-size:11.5px;color:var(--ink3)}
+.card-b{padding:18px}
+.grid2{display:grid;grid-template-columns:1.55fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.stack{display:flex;flex-direction:column;gap:14px}
+
+/* ---- entry form ---- */
+.form{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.f label{display:block;font-size:11.5px;color:var(--ink2);margin-bottom:5px}
+.f input,.f select{width:100%;background:var(--bg);border:1px solid var(--line2);border-radius:8px;padding:9px 11px;font:inherit;font-size:14px;color:var(--ink);font-variant-numeric:tabular-nums}
+.f input:focus,.f select:focus{border-color:var(--acc)}
+.btn{background:var(--acc);color:var(--acc-ink);border:0;border-radius:8px;padding:10px 20px;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.frow{display:flex;gap:12px;align-items:center;margin-top:14px;flex-wrap:wrap}
+.saved{font-size:12.5px;color:var(--ink2);display:flex;align-items:center;gap:6px}
+.note-in{grid-column:1/-1}
+
+/* ---- charts ---- */
+.chart{width:100%;height:auto;display:block;overflow:visible}
+.chart text{font-family:"IBM Plex Sans Arabic",sans-serif;font-variant-numeric:tabular-nums}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink2);margin-bottom:12px}
+.legend i{width:14px;height:3px;border-radius:2px;display:inline-block;vertical-align:middle;margin-inline-end:6px}
+.legend i.dash{background:none!important;border-top:3px dashed var(--s3)}
+
+/* ---- tables ---- */
+.tw{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:right;font-weight:600;font-size:11.5px;color:var(--ink2);letter-spacing:.02em;padding:9px 10px;border-bottom:1px solid var(--line2);white-space:nowrap;background:var(--surf2);position:sticky;top:0}
+td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:hover{background:var(--surf2)}
+td.n{font-variant-numeric:tabular-nums;white-space:nowrap}
+.pill{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap;border:1px solid transparent}
+.p-crit{background:var(--crit-bg);color:var(--crit);border-color:color-mix(in srgb,var(--crit) 30%,transparent)}
+.p-ser{background:var(--serious-bg);color:#b85f35;border-color:color-mix(in srgb,var(--serious) 34%,transparent)}
+.p-warn{background:var(--warn-bg);color:#8a6004;border-color:color-mix(in srgb,var(--warn) 40%,transparent)}
+.p-good{background:var(--good-bg);color:#0a7d0a;border-color:color-mix(in srgb,var(--good) 30%,transparent)}
+.p-mute{background:var(--surf2);color:var(--ink2);border-color:var(--line)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .p-ser{color:var(--serious)}:root:not([data-theme="light"]) .p-warn{color:var(--warn)}:root:not([data-theme="light"]) .p-good{color:#2bc32b}}
+:root[data-theme="dark"] .p-ser{color:var(--serious)}
+:root[data-theme="dark"] .p-warn{color:var(--warn)}
+:root[data-theme="dark"] .p-good{color:#2bc32b}
+
+/* ---- scenario ---- */
+.scen{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.sc{background:var(--surf);border:1px solid var(--line);border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:9px}
+.sc.hi{border-color:color-mix(in srgb,var(--acc) 55%,transparent);box-shadow:0 0 0 2px var(--acc-soft)}
+.sc h4{font-size:15px}
+.sc .sub{font-size:11.5px;color:var(--ink2);min-height:32px}
+.sc .dd{font-family:"Readex Pro",sans-serif;font-size:20px;letter-spacing:-.02em}
+.sc ul{margin:4px 0 0;padding-inline-start:16px;font-size:11.5px;color:var(--ink2);line-height:1.75}
+.slip{font-size:12px;font-weight:600}
+
+/* ---- misc ---- */
+.bars{display:flex;flex-direction:column;gap:11px}
+.brow{display:grid;grid-template-columns:132px 1fr 64px;gap:10px;align-items:center;font-size:12.5px}
+.btrack{height:22px;background:var(--surf2);border-radius:5px;overflow:hidden;display:flex}
+.bfill{height:100%}
+.risk-t td:first-child{font-weight:600}
+.cp{display:flex;flex-direction:column;gap:0}
+.cpi{display:grid;grid-template-columns:30px 1fr;gap:14px;padding:15px 0;border-bottom:1px solid var(--line)}
+.cpi:last-child{border-bottom:0}
+.rk{width:26px;height:26px;border-radius:7px;background:var(--surf3);color:var(--ink);display:grid;place-items:center;font-family:"Readex Pro",sans-serif;font-size:13px;font-weight:600}
+.cpi.top .rk{background:var(--crit);color:#fff}
+.cpi h4{font-size:14px;margin-bottom:3px}
+.cpi .meta{font-size:11.5px;color:var(--ink3);margin-bottom:6px;display:flex;gap:12px;flex-wrap:wrap}
+.cpi p{margin:0;font-size:12.5px;color:var(--ink2);line-height:1.65}
+.filters{display:flex;gap:10px;flex-wrap:wrap;align-items:end;margin-bottom:14px}
+.filters .f{min-width:auto}
+.filters select,.filters input{font-size:13px;padding:7px 10px}
+.rec{display:grid;gap:1px;background:var(--line)}
+.recrow{background:var(--surf);padding:13px 14px;display:grid;grid-template-columns:1fr 190px 180px 110px;gap:14px;font-size:12.5px}
+.recrow .a{font-weight:500;color:var(--ink)}
+.recrow .m{color:var(--ink2)} .recrow .o{color:var(--ink2)}
+.recrow .d{font-variant-numeric:tabular-nums;color:var(--ink2)}
+.recrow.h{background:var(--surf2);font-size:11px;color:var(--ink2);font-weight:600;letter-spacing:.02em}
+.lvl{display:flex;align-items:center;gap:9px;margin:20px 0 10px;font-size:13px;font-weight:600}
+.lvl:first-child{margin-top:0}
+.lvl .n{width:22px;height:22px;border-radius:6px;background:var(--acc);color:var(--acc-ink);display:grid;place-items:center;font-size:11.5px}
+.callout{background:var(--surf2);border-inline-start:3px solid var(--acc);border-radius:0 9px 9px 0;padding:13px 15px;font-size:13px;color:var(--ink2);line-height:1.7}
+.callout b{color:var(--ink)}
+.foot{margin-top:34px;padding-top:18px;border-top:1px solid var(--line);font-size:11.5px;color:var(--ink3);line-height:1.8}
+.ind{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.indi{background:var(--surf);padding:14px}
+.indi .t{font-size:12.5px;font-weight:600;margin-bottom:4px}
+.indi .g{font-family:"Readex Pro",sans-serif;font-size:17px;color:var(--acc);letter-spacing:-.01em}
+.indi .g small{font-size:11px;color:var(--ink3);font-family:"IBM Plex Sans Arabic",sans-serif}
+.indi .w{font-size:11.5px;color:var(--ink2);margin-top:6px;line-height:1.6}
+.tip{position:fixed;pointer-events:none;background:var(--surf);border:1px solid var(--line2);border-radius:8px;padding:8px 11px;font-size:12px;box-shadow:var(--shadow);z-index:60;opacity:0;transition:opacity .1s;max-width:230px}
+.tip.on{opacity:1}
+.tip b{display:block;margin-bottom:3px;font-size:12.5px}
+.tip .r{display:flex;justify-content:space-between;gap:14px;color:var(--ink2);font-variant-numeric:tabular-nums}
+
+@media (max-width:1080px){
+  .kpis{grid-template-columns:repeat(3,1fr)}
+  .scen{grid-template-columns:repeat(2,1fr)}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .form{grid-template-columns:repeat(3,1fr)}
+  .ind{grid-template-columns:repeat(2,1fr)}
+  .recrow{grid-template-columns:1fr 1fr;gap:8px}
+  .recrow.h{display:none}
+}
+@media (max-width:620px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .scen{grid-template-columns:1fr}
+  .form{grid-template-columns:repeat(2,1fr)}
+  .ind{grid-template-columns:1fr}
+  .verdict-in{grid-template-columns:1fr}
+  .gapbox{border-inline-start:0;border-top:1px solid var(--line);padding-inline-start:0;padding-top:14px;text-align:right}
+  .recrow{grid-template-columns:1fr}
+  .brow{grid-template-columns:96px 1fr 54px;font-size:11.5px}
+  .verdict h2{font-size:18px}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18"/><path d="M5 20V11l5-3 5 3"/><path d="M15 20v-6h4v6"/><path d="M8 20v-4h3v4"/></svg></span>
+      <div>
+        <h1>رصد حفر المرحلة الثانية</h1>
+        <p>شبكات الصرف الصحي — حوطة بني تميم والخرج</p>
+      </div>
+    </div>
+    <div class="cd">
+      <div class="cd-box"><b class="num" id="cdDays">49</b><span>يوم للتسليم</span></div>
+      <div class="cd-box" style="background:var(--surf2);border-color:var(--line)"><b class="num" style="color:var(--ink)" id="cdM">5,925</b><span>متر حفر متبقٍ</span></div>
+      <button class="ghost" id="themeBtn" type="button" title="تبديل السمة">◐</button>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="verdict">
+    <div class="verdict-bar"></div>
+    <div class="verdict-in">
+      <div>
+        <span class="vtag">⚠ تقييم الجدول الزمني</span>
+        <h2>التسليم في 31 أكتوبر غير قابل للتحقيق بالمسار الحالي</h2>
+        <p>المتبقي <strong class="num">5,925 متر حفر</strong> في <strong class="num">49 يوماً</strong> يتطلب <strong class="num">121 م/يوم</strong> — وإذا لزم إنهاء الحفر قبل التسليم بعشرة أيام لإتاحة الدفان والأسفلت فالمطلوب <strong class="num">174 م/يوم</strong>. المعدل المسجّل خلال 5–10 سبتمبر هو <strong class="num">47.3 م/يوم</strong>. والأخطر أن <strong class="num">4,738 متراً (80% من الحفر المتبقي)</strong> بلا تصريح — أي أن التعبئة الإضافية وحدها لن تنتج شيئاً قبل صدور التصاريح.</p>
+      </div>
+      <div class="gapbox">
+        <b class="num">3.7×</b>
+        <span>الفجوة بين المعدل<br>الفعلي والمطلوب</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="kpis" id="kpis"></section>
+
+  <nav class="tabs" role="tablist" aria-label="أقسام المتابعة">
+    <button class="tab" role="tab" id="t-today"  aria-controls="p-today"  aria-selected="true">المتابعة اليومية</button>
+    <button class="tab" role="tab" id="t-fore"   aria-controls="p-fore"   aria-selected="false">التوقعات والسيناريوهات</button>
+    <button class="tab" role="tab" id="t-risk"   aria-controls="p-risk"   aria-selected="false">مواضع الخطر</button>
+    <button class="tab" role="tab" id="t-plan"   aria-controls="p-plan"   aria-selected="false">خطة الاسترداد</button>
+    <button class="tab" role="tab" id="t-seg"    aria-controls="p-seg"    aria-selected="false">القطاعات</button>
+  </nav>
+
+  <!-- ============ TODAY ============ -->
+  <section class="panel" id="p-today" role="tabpanel" aria-labelledby="t-today">
+    <div class="stack">
+
+      <div class="card">
+        <div class="card-h">
+          <h3>تسجيل إنجاز اليوم</h3>
+          <span class="hint" id="dbState">…</span>
+        </div>
+        <div class="card-b">
+          <div class="form">
+            <div class="f"><label for="inDate">التاريخ</label><input type="date" id="inDate" value="2026-09-12"></div>
+            <div class="f"><label for="inM">أمتار الحفر المنجزة</label><input type="number" id="inM" min="0" step="0.1" placeholder="0"></div>
+            <div class="f"><label for="inCrews">فرق الحفر العاملة</label><input type="number" id="inCrews" min="0" max="30" step="1" placeholder="2"></div>
+            <div class="f"><label for="inFronts">الجبهات المفتوحة</label><input type="number" id="inFronts" min="0" max="40" step="1" placeholder="2"></div>
+            <div class="f"><label for="inPerm">تصاريح صدرت اليوم</label><input type="number" id="inPerm" min="0" max="60" step="1" placeholder="0"></div>
+            <div class="f note-in"><label for="inNote">ملاحظة / سبب التوقف إن وُجد</label><input type="text" id="inNote" placeholder="مثال: تعارض مع خط مياه في A-11-4 — توقف 4 ساعات"></div>
+          </div>
+          <div class="frow">
+            <button class="btn" id="saveBtn" type="button">حفظ قيد اليوم</button>
+            <span class="saved" id="saveMsg"></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" id="insightCard">
+        <div class="card-h"><h3>قراءة اليوم</h3><span class="hint">تتحدّث آلياً مع كل قيد جديد</span></div>
+        <div class="card-b" id="insights"></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-h">
+            <h3>منحنى الإنجاز التراكمي للحفر</h3>
+            <span class="hint">الفترة 12 سبتمبر — 21 أكتوبر</span>
+          </div>
+          <div class="card-b">
+            <div class="legend">
+              <span><i style="background:var(--s1)"></i>خط الأساس المطلوب</span>
+              <span><i style="background:var(--s2)"></i>المنجز الفعلي</span>
+              <span><i class="dash"></i>الإسقاط بالمعدل الحالي</span>
+            </div>
+            <div id="sCurve"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-h"><h3>مخزون العمل المُصرَّح</h3><span class="hint">المؤشر الاستباقي الأهم</span></div>
+          <div class="card-b" id="permCard"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h">
+          <h3>الإنتاج اليومي مقابل عتبات الإنذار</h3>
+          <span class="hint">الأعمدة ملوّنة حسب مستوى الأداء، والخط الأفقي هو المطلوب يومياً</span>
+        </div>
+        <div class="card-b"><div id="dailyChart"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h3>سجل الأيام</h3><span class="hint">اضغط أي صف لتعديله</span></div>
+        <div class="card-b" style="padding:0"><div class="tw"><table id="logTable"></table></div></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============ FORECAST ============ -->
+  <section class="panel" id="p-fore" role="tabpanel" aria-labelledby="t-fore" hidden>
+    <div class="stack">
+      <div class="callout" id="foreNote"></div>
+      <div class="scen" id="scenarios"></div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-h">
+            <h3>لماذا لا يكفي حساب الأمتار وحده</h3>
+            <span class="hint">الأمتار مقابل الجهد الحقيقي</span>
+          </div>
+          <div class="card-b" id="depthSplit"></div>
+        </div>
+        <div class="card">
+          <div class="card-h"><h3>خط الأساس الأسبوعي</h3><span class="hint">المطلوب لتسليم 31 أكتوبر</span></div>
+          <div class="card-b" style="padding:0"><div class="tw"><table id="weekTable"></table></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-h"><h3>عتبات الإنذار وقواعد التصعيد</h3><span class="hint">تُطبَّق آلياً على كل قيد يومي</span></div>
+        <div class="card-b" id="thresholds"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ RISK ============ -->
+  <section class="panel" id="p-risk" role="tabpanel" aria-labelledby="t-risk" hidden>
+    <div class="stack">
+      <div class="card">
+        <div class="card-h"><h3>المسار الحرج</h3><span class="hint">مرتّب بالمدة الحقيقية لا بالطول</span></div>
+        <div class="card-b"><div class="cp" id="critPath"></div></div>
+      </div>
+      <div class="card">
+        <div class="card-h"><h3>سجل المخاطر</h3><span class="hint">10 مخاطر مرتّبة بدرجة الخطورة</span></div>
+        <div class="card-b" style="padding:0"><div class="tw"><table class="risk-t" id="riskTable"></table></div></div>
+      </div>
+      <div class="card">
+        <div class="card-h"><h3>مؤشرات الإنذار المبكر</h3><span class="hint">تسبق المشكلة بدل أن تسجّلها بعد وقوعها</span></div>
+        <div class="card-b"><div class="ind" id="indicators"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PLAN ============ -->
+  <section class="panel" id="p-plan" role="tabpanel" aria-labelledby="t-plan" hidden>
+    <div class="card">
+      <div class="card-h"><h3>خطة الاسترداد على ثلاثة مستويات</h3><span class="hint">كل إجراء بمالك ومقياس نجاح رقمي وموعد</span></div>
+      <div class="card-b" id="recovery"></div>
+    </div>
+  </section>
+
+  <!-- ============ SEGMENTS ============ -->
+  <section class="panel" id="p-seg" role="tabpanel" aria-labelledby="t-seg" hidden>
+    <div class="card">
+      <div class="card-h"><h3>القطاعات المتبقية</h3><span class="hint" id="segCount"></span></div>
+      <div class="card-b">
+        <div class="filters">
+          <div class="f"><label for="fSearch">بحث بالشارع أو رقم الخط</label><input type="text" id="fSearch" placeholder="مثال: الأمير تركي"></div>
+          <div class="f"><label for="fStage">المرحلة</label><select id="fStage"></select></div>
+          <div class="f"><label for="fPermit">التصريح</label><select id="fPermit">
+            <option value="">الكل</option><option value="no">بدون تصريح</option><option value="yes">لديه تصريح</option></select></div>
+          <div class="f"><label for="fDepth">العمق</label><select id="fDepth">
+            <option value="">الكل</option><option value="deep">عميق (أكثر من 2.5 م)</option><option value="shallow">ضحل</option></select></div>
+          <div class="f"><label for="fSort">الترتيب</label><select id="fSort">
+            <option value="eqm">الجهد (أمتار مكافئة)</option><option value="m">الطول</option><option value="dm">العمق</option></select></div>
+        </div>
+      </div>
+      <div class="tw"><table id="segTable"></table></div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    مصدر البيانات: ملف «القطاعات المتبقية» — 60 قطاعاً، 8,240.01 متراً طولياً · تاريخ القراءة 12 سبتمبر 2026 · سجل الإنتاج 5–10 سبتمبر 2026.<br>
+    النموذج الكمي يحوّل الأمتار إلى <b>أمتار مكافئة</b> بمعامل صعوبة حسب العمق (1.00 عند ≤2 م حتى 3.75 عند 6.5 م)، ويفترض إنتاجية اسمية 60 م/يوم للطاقم عند الأعماق الضحلة وأسبوع عمل ستة أيام.<br>
+    القيود المعروفة على البيانات: القطاع رقم 43 مكرر بصفّين · «خط الخرج» (600 م) بلا رقم خط ولا عمق مسجّل واحتُسب ضحلاً كافتراض متفائل · يوم 9 سبتمبر مسجّل صفراً دون تمييز بين «لم يُنتَج» و«لم يُسجَّل».
+  </footer>
+</div>
+<div class="tip" id="tip" role="status" aria-live="polite"></div>
+<script>
+const D={"meta":{"project":"شبكات الصرف الصحي — حوطة بني تميم والخرج","phase":"المرحلة الثانية","dataDate":"2026-09-12","target":"2026-10-31","daysLeft":49,"excDeadline":"2026-10-21","totM":8240.01,"excM":5925.2,"excEq":7374.6,"excDoneM":2314.81,"segTotal":60,"segExc":47,"permM":1186.86,"noPermM":4738.34,"noPermPct":80.0,"deepM":1064.23,"deepEq":2471.1,"deepPctLen":18.0,"deepPctEff":33.5,"crews":2,"crewRate":23.7,"nominalCrewRate":60,"reqRate":120.9,"reqRateExcDl":174.3,"logUpdated":"2026-09-10"},"thresholds":{"safe":165.6,"warn":130.7,"danger":87.1,"ma7safe":156.8,"ma7esc":139.4,"ma7act":104.6,"rules":["يومان متتاليان < 131 م/يوم ⇒ تصعيد فوري","3 أيام من أصل 7 < 87 م/يوم ⇒ تصعيد فوري","متوسط 7 أيام < 139 م/يوم ⇒ مراجعة التعبئة رسمياً","رصيد الأمتار المصرّحة غير المحفورة < 523 م (3 أيام عمل) ⇒ إنذار «نفاد جبهات العمل»","أي يوم بإنتاج صفر ⇒ تقرير سبب إلزامي خلال 24 ساعة"]},"baseline":[{"d":"2026-09-12","cum":0.0,"day":0.0},{"d":"2026-09-13","cum":63.7,"day":63.7},{"d":"2026-09-14","cum":130.3,"day":66.6},{"d":"2026-09-15","cum":201.4,"day":71.1},{"d":"2026-09-16","cum":278.5,"day":77.1},{"d":"2026-09-17","cum":362.9,"day":84.3},{"d":"2026-09-18","cum":362.9,"day":0.0},{"d":"2026-09-19","cum":464.7,"day":101.9},{"d":"2026-09-20","cum":576.5,"day":111.8},{"d":"2026-09-21","cum":698.6,"day":122.1},{"d":"2026-09-22","cum":831.4,"day":132.8},{"d":"2026-09-23","cum":975.0,"day":143.6},{"d":"2026-09-24","cum":1129.2,"day":154.2},{"d":"2026-09-25","cum":1129.2,"day":0.0},{"d":"2026-09-26","cum":1303.7,"day":174.5},{"d":"2026-09-27","cum":1487.4,"day":183.7},{"d":"2026-09-28","cum":1679.4,"day":192.0},{"d":"2026-09-29","cum":1878.7,"day":199.3},{"d":"2026-09-30","cum":2084.0,"day":205.3},{"d":"2026-10-01","cum":2293.7,"day":209.8},{"d":"2026-10-02","cum":2293.7,"day":0.0},{"d":"2026-10-03","cum":2507.4,"day":213.6},{"d":"2026-10-04","cum":2721.0,"day":213.6},{"d":"2026-10-05","cum":2934.6,"day":213.6},{"d":"2026-10-06","cum":3148.2,"day":213.6},{"d":"2026-10-07","cum":3361.8,"day":213.6},{"d":"2026-10-08","cum":3575.4,"day":213.6},{"d":"2026-10-09","cum":3575.4,"day":0.0},{"d":"2026-10-10","cum":3789.1,"day":213.6},{"d":"2026-10-11","cum":4002.7,"day":213.6},{"d":"2026-10-12","cum":4216.3,"day":213.6},{"d":"2026-10-13","cum":4429.9,"day":213.6},{"d":"2026-10-14","cum":4643.5,"day":213.6},{"d":"2026-10-15","cum":4857.1,"day":213.6},{"d":"2026-10-16","cum":4857.1,"day":0.0},{"d":"2026-10-17","cum":5070.7,"day":213.6},{"d":"2026-10-18","cum":5284.4,"day":213.6},{"d":"2026-10-19","cum":5498.0,"day":213.6},{"d":"2026-10-20","cum":5711.6,"day":213.6},{"d":"2026-10-21","cum":5925.2,"day":213.6}],"weekly":[{"week":1,"week_end":"2026-09-17","workdays":5,"planned_m_week":362.9,"required_daily_rate_m":72.6,"cumulative_planned_m":362.9,"cumulative_pct":6.1,"permits_required_by_m":975.0},{"week":2,"week_end":"2026-09-24","workdays":6,"planned_m_week":766.3,"required_daily_rate_m":127.7,"cumulative_planned_m":1129.2,"cumulative_pct":19.1,"permits_required_by_m":2084.0},{"week":3,"week_end":"2026-10-01","workdays":6,"planned_m_week":1164.5,"required_daily_rate_m":194.1,"cumulative_planned_m":2293.7,"cumulative_pct":38.7,"permits_required_by_m":3362.0},{"week":4,"week_end":"2026-10-08","workdays":6,"planned_m_week":1281.7,"required_daily_rate_m":213.6,"cumulative_planned_m":3575.4,"cumulative_pct":60.3,"permits_required_by_m":4644.0},{"week":5,"week_end":"2026-10-15","workdays":6,"planned_m_week":1281.7,"required_daily_rate_m":213.6,"cumulative_planned_m":4857.1,"cumulative_pct":82.0,"permits_required_by_m":5925.0},{"week":6,"week_end":"2026-10-22","workdays":5,"planned_m_week":1068.1,"required_daily_rate_m":213.6,"cumulative_planned_m":5925.2,"cumulative_pct":100.0,"permits_required_by_m":5925.0}],"scenarios":[{"key":"status_quo","name":"الوضع الراهن","sub":"فرقتان، بلا تصعيد","crews":2,"rate":47.3,"excFinish":"2027-03-03","delivery":"2027-03-17","slip":137,"cond":["لا تعبئة إضافية","التصاريح تسير بوتيرتها الحالية"]},{"key":"pessimistic","name":"متشائم","sub":"تصعيد بطيء، 3 فرق","crews":3,"rate":73.2,"excFinish":"2026-12-15","delivery":"2026-12-29","slip":59,"cond":["+1 فرقة فقط خلال شهر","كفاءة 50%","التصاريح كاملة بعد 75 يوم"]},{"key":"realistic","name":"واقعي","sub":"تصعيد معتدل، 5 فرق + متابعة تصاريح","crews":5,"rate":116.2,"excFinish":"2026-11-10","delivery":"2026-11-22","slip":22,"cond":["+3 فرق ضحلة خلال 4 أسابيع","فرقتا حفر عميق بعد 3 أسابيع","التصاريح كاملة خلال 45 يوم"]},{"key":"optimistic","name":"متفائل","sub":"تعبئة طارئة، 8 فرق + تصعيد تصاريح","crews":8,"rate":155.9,"excFinish":"2026-10-20","delivery":"2026-10-28","slip":-3,"cond":["+6 فرق خلال 3 أسابيع","3 أطقم تدعيم للحفر العميق خلال 12 يوم","40 تصريح كاملة خلال 28 يوم","عمل الجمعة نصف يوم"]}],"segments":[{"id":"S01","st":"شارع عمر بن الخطاب","ln":"A-10-6","sg":"دفان","ss":"جاري","m":299.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":299.0,"pm":true,"ed":true},{"id":"S02","st":"الترجي","ln":"A-8-3-1","sg":"حفر","ss":"جاري","m":116.23,"dp":"2.44","dm":2.44,"f":1.22,"eqm":141.8,"pm":true,"ed":false},{"id":"S03","st":"الاقدام","ln":"A-2-4","sg":"اسفلت","ss":"جاري","m":75.43,"dp":"1.88","dm":1.88,"f":1.0,"eqm":75.4,"pm":true,"ed":true},{"id":"S04","st":"الاقدام","ln":"A-2-3","sg":"اسفلت","ss":"جاري","m":79.51,"dp":"1.88","dm":1.88,"f":1.0,"eqm":79.5,"pm":true,"ed":true},{"id":"S05","st":"البحور","ln":"A-2-2","sg":"اسفلت","ss":"جاري","m":80.5,"dp":"1.88","dm":1.88,"f":1.0,"eqm":80.5,"pm":true,"ed":true},{"id":"S06","st":"الاعتدال","ln":"A-1-6","sg":"اسفلت","ss":"جاري","m":75.52,"dp":"1.88","dm":1.88,"f":1.0,"eqm":75.5,"pm":true,"ed":true},{"id":"S07","st":"الامام النسائي","ln":"A-1-2","sg":"اسفلت","ss":"جاري","m":18.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":18.0,"pm":true,"ed":true},{"id":"S08","st":"عامر بن الزبير","ln":"A-7-1","sg":"اسفلت","ss":"جاري","m":80.49,"dp":"1.88","dm":1.88,"f":1.0,"eqm":80.5,"pm":true,"ed":true},{"id":"S09","st":"عكرمه","ln":"A-7-2","sg":"اسفلت","ss":"جاري","m":79.96,"dp":"1.88","dm":1.88,"f":1.0,"eqm":80.0,"pm":true,"ed":true},{"id":"S10","st":"المدينه المنوره","ln":"A-10-4","sg":"تم الانتهاء","ss":"جاري","m":559.6,"dp":"1.88","dm":1.88,"f":1.0,"eqm":559.6,"pm":true,"ed":true},{"id":"S11","st":"الامير تركي","ln":"A-11-1","sg":"تم الانتهاء","ss":"مغلق","m":733.47,"dp":"1.88","dm":1.88,"f":1.0,"eqm":733.5,"pm":true,"ed":true},{"id":"S12","st":"الحسناء 1","ln":"A-10-3-1","sg":"اسفلت","ss":"جاري","m":77.2,"dp":"1.88","dm":1.88,"f":1.0,"eqm":77.2,"pm":true,"ed":true},{"id":"S13","st":"الحسناء 2","ln":"A-10-3-2","sg":"اسفلت","ss":"جاري","m":76.93,"dp":"1.88","dm":1.88,"f":1.0,"eqm":76.9,"pm":true,"ed":true},{"id":"S14","st":"الرائد","ln":"A-10-6-1","sg":"اسفلت","ss":"جاري","m":79.2,"dp":"2.2","dm":2.2,"f":1.1,"eqm":87.1,"pm":true,"ed":true},{"id":"S15","st":"المباركه","ln":"A-11-4","sg":"حفر","ss":"جاري","m":695.12,"dp":"1.88","dm":1.88,"f":1.0,"eqm":695.1,"pm":true,"ed":false},{"id":"S16","st":"القادسيه+ المطرودي","ln":"A-6","sg":"حفر","ss":"غير جاري","m":153.71,"dp":"1.88","dm":1.88,"f":1.0,"eqm":153.7,"pm":true,"ed":false},{"id":"S17","st":"الحياه","ln":"A-10-2-1-3-1","sg":"لم يتم البدء","ss":"غير جاري","m":73.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":73.0,"pm":true,"ed":false},{"id":"S18","st":"احمد بن عبدالعزيز","ln":"A-10-6","sg":"لم يتم البدء","ss":"غير جاري","m":56.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":56.0,"pm":true,"ed":false},{"id":"S19","st":"الثبات","ln":"A-11-4-7","sg":"تجهيز موقع","ss":"غير جاري","m":53.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":53.0,"pm":true,"ed":false},{"id":"S20","st":"ام القري","ln":"A-10-2-1-3-1","sg":"لم يتم البدء","ss":"غير جاري","m":39.8,"dp":"1.88","dm":1.88,"f":1.0,"eqm":39.8,"pm":true,"ed":false},{"id":"S21","st":"التعدين","ln":"A-8-1-4-2","sg":"لم يتم البدء","ss":"غير جاري","m":78.49,"dp":"1.88","dm":1.88,"f":1.0,"eqm":78.5,"pm":false,"ed":false},{"id":"S22","st":"التسامح","ln":"A-8-1-2","sg":"لم يتم البدء","ss":"غير جاري","m":90.84,"dp":"1.88","dm":1.88,"f":1.0,"eqm":90.8,"pm":false,"ed":false},{"id":"S23","st":"الترجي","ln":"A-8-2","sg":"لم يتم البدء","ss":"غير جاري","m":131.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":131.0,"pm":false,"ed":false},{"id":"S24","st":"ابراهيم النشمي","ln":"A-6-1","sg":"لم يتم البدء","ss":"غير جاري","m":75.43,"dp":"1.88","dm":1.88,"f":1.0,"eqm":75.4,"pm":false,"ed":false},{"id":"S25","st":"القادسيه","ln":"A-6","sg":"لم يتم البدء","ss":"غير جاري","m":74.0,"dp":"2.66","dm":2.66,"f":1.33,"eqm":98.4,"pm":false,"ed":false},{"id":"S26","st":"الحارث بن اسد","ln":"A-3","sg":"لم يتم البدء","ss":"غير جاري","m":79.94,"dp":"1.88","dm":1.88,"f":1.0,"eqm":79.9,"pm":false,"ed":false},{"id":"S27","st":"البر","ln":"A-3-1","sg":"لم يتم البدء","ss":"غير جاري","m":75.63,"dp":"1.88","dm":1.88,"f":1.0,"eqm":75.6,"pm":false,"ed":false},{"id":"S28","st":"البحور","ln":"A-2-1","sg":"لم يتم البدء","ss":"غير جاري","m":81.65,"dp":"1.88","dm":1.88,"f":1.0,"eqm":81.7,"pm":false,"ed":false},{"id":"S29","st":"الدفاع","ln":"A-9-2","sg":"لم يتم البدء","ss":"غير جاري","m":76.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":76.0,"pm":false,"ed":false},{"id":"S30","st":"النخبه","ln":"A-9-4-2","sg":"لم يتم البدء","ss":"غير جاري","m":50.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":50.0,"pm":false,"ed":false},{"id":"S31","st":"الحياه","ln":"A-10-2-1-3-2","sg":"لم يتم البدء","ss":"غير جاري","m":60.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":60.0,"pm":false,"ed":false},{"id":"S32","st":"الدفاع","ln":"A-9-1","sg":"لم يتم البدء","ss":"غير جاري","m":78.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":78.0,"pm":false,"ed":false},{"id":"S33","st":"الملك سلمان","ln":"A-9","sg":"لم يتم البدء","ss":"غير جاري","m":76.72,"dp":"1.88","dm":1.88,"f":1.0,"eqm":76.7,"pm":false,"ed":false},{"id":"S34","st":"المتنبي","ln":"A-9","sg":"لم يتم البدء","ss":"غير جاري","m":100.0,"dp":"2.03","dm":2.03,"f":1.015,"eqm":101.5,"pm":false,"ed":false},{"id":"S35","st":"السلطان حسن","ln":"A-10-2-1-3","sg":"لم يتم البدء","ss":"غير جاري","m":72.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":72.0,"pm":false,"ed":false},{"id":"S36","st":"السلطان حسن","ln":"A-10-2-1-2","sg":"لم يتم البدء","ss":"غير جاري","m":75.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":75.0,"pm":false,"ed":false},{"id":"S37","st":"احد","ln":"A-10-2","sg":"لم يتم البدء","ss":"غير جاري","m":77.3,"dp":"2..00","dm":2.0,"f":1.0,"eqm":77.3,"pm":false,"ed":false},{"id":"S38","st":"احد","ln":"A-10-1","sg":"لم يتم البدء","ss":"غير جاري","m":79.04,"dp":"2.4","dm":2.4,"f":1.2,"eqm":94.8,"pm":false,"ed":false},{"id":"S39","st":"ام القري","ln":"A-10-2-1-1","sg":"لم يتم البدء","ss":"غير جاري","m":82.6,"dp":"1.88","dm":1.88,"f":1.0,"eqm":82.6,"pm":false,"ed":false},{"id":"S40","st":"المدينه المنوره","ln":"A-10-3","sg":"لم يتم البدء","ss":"غير جاري","m":77.97,"dp":"1.88","dm":1.88,"f":1.0,"eqm":78.0,"pm":false,"ed":false},{"id":"S41","st":"المدينه المنوره","ln":"A-10-4","sg":"لم يتم البدء","ss":"غير جاري","m":72.98,"dp":"1.88","dm":1.88,"f":1.0,"eqm":73.0,"pm":false,"ed":false},{"id":"S42","st":"الامير احمد بن عبدالعزيز","ln":"A-10-5","sg":"لم يتم البدء","ss":"غير جاري","m":60.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":60.0,"pm":false,"ed":false},{"id":"S43","st":"الامير تركي","ln":"A-10","sg":"تجهيز موقع","ss":"غير جاري","m":568.0,"dp":"6.50 TO 2.50","dm":6.5,"f":2.301,"eqm":1307.0,"pm":false,"ed":false},{"id":"S44","st":"الامير تركي","ln":"A-10","sg":"لم يتم البدء","ss":"غير جاري","m":286.0,"dp":"6.50 TO 2.50","dm":6.5,"f":2.301,"eqm":658.1,"pm":false,"ed":false},{"id":"S45","st":"التيسير","ln":"A-11-1-3","sg":"لم يتم البدء","ss":"غير جاري","m":83.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":83.0,"pm":false,"ed":false},{"id":"S46","st":"احد","ln":"A-11-1-1","sg":"لم يتم البدء","ss":"غير جاري","m":231.35,"dp":"1.88","dm":1.88,"f":1.0,"eqm":231.3,"pm":false,"ed":false},{"id":"S47","st":"احد","ln":"A-11-1-2","sg":"لم يتم البدء","ss":"غير جاري","m":233.53,"dp":"1.88","dm":1.88,"f":1.0,"eqm":233.5,"pm":false,"ed":false},{"id":"S48","st":"التوحيد","ln":"A-11-1-2-1-1","sg":"لم يتم البدء","ss":"غير جاري","m":72.0,"dp":"1.9","dm":1.9,"f":1.0,"eqm":72.0,"pm":false,"ed":false},{"id":"S49","st":"البيت العتيق","ln":"A-11-1-2-1-1","sg":"لم يتم البدء","ss":"غير جاري","m":70.62,"dp":"1.9","dm":1.9,"f":1.0,"eqm":70.6,"pm":false,"ed":false},{"id":"S50","st":"الحسن","ln":"A-11-3","sg":"لم يتم البدء","ss":"غير جاري","m":77.04,"dp":"1.88","dm":1.88,"f":1.0,"eqm":77.0,"pm":false,"ed":false},{"id":"S51","st":"التقوي","ln":"A-11-2","sg":"لم يتم البدء","ss":"غير جاري","m":110.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":110.0,"pm":false,"ed":false},{"id":"S52","st":"الملك سلمان","ln":"A-11","sg":"لم يتم البدء","ss":"غير جاري","m":81.0,"dp":"6.25","dm":6.25,"f":3.542,"eqm":286.9,"pm":false,"ed":false},{"id":"S53","st":"الامير تركي","ln":"A-11","sg":"لم يتم البدء","ss":"غير جاري","m":19.23,"dp":"6.5","dm":6.5,"f":3.75,"eqm":72.1,"pm":false,"ed":false},{"id":"S54","st":"التعليم","ln":"A-11-5-1","sg":"لم يتم البدء","ss":"غير جاري","m":75.25,"dp":"1.88","dm":1.88,"f":1.0,"eqm":75.2,"pm":false,"ed":false},{"id":"S55","st":"المباركه","ln":"A-11-5","sg":"لم يتم البدء","ss":"غير جاري","m":76.0,"dp":"1.95","dm":1.95,"f":1.0,"eqm":76.0,"pm":false,"ed":false},{"id":"S56","st":"يثرب","ln":"A-11","sg":"لم يتم البدء","ss":"غير جاري","m":33.92,"dp":"1.95","dm":1.95,"f":1.0,"eqm":33.9,"pm":false,"ed":false},{"id":"S57","st":"الثبات","ln":"A-11-4","sg":"لم يتم البدء","ss":"غير جاري","m":265.81,"dp":"1.88","dm":1.88,"f":1.0,"eqm":265.8,"pm":false,"ed":false},{"id":"S58","st":"يثرب","ln":"A-11-4-5","sg":"لم يتم البدء","ss":"غير جاري","m":95.0,"dp":"1.88","dm":1.88,"f":1.0,"eqm":95.0,"pm":false,"ed":false},{"id":"S59","st":"الملك فيصل خط الطرد","ln":"LINE P","sg":"لم يتم البدء","ss":"غير جاري","m":36.0,"dp":"2.7","dm":2.7,"f":1.35,"eqm":48.6,"pm":false,"ed":false},{"id":"S60","st":"خط الخرج","ln":"—","sg":"لم يتم البدء","ss":"غير محدد","m":600.0,"dp":"—","dm":1.88,"f":1.0,"eqm":600.0,"pm":false,"ed":false}],"risks":[{"id":"R-01","title":"شلل التصاريح — 4,738 م (80% من الحفر المتبقي) محجوزة قانونياً بلا تصريح","impact_m":4738.34,"impact_days":55,"probability":"عالية","severity":25,"severity_label":"حرجة","owner":"الجهة المالكة + الاستشاري (المتابعة) / الأمانة (الإصدار)","action":"تقديم دفعة واحدة (Batch) لـ 40 تصريحاً موزعة على 3 حزم حسب أولوية المسار الحرج؛ تعيين منسق تصاريح متفرغ لدى المقاول + خطاب تصعيد من المالك لأمانة منطقة الرياض/بلدية حوطة بني تميم يطلب مساراً معجّلاً؛ عقد اجتماع أسبوعي ثابت مع الأمانة.","deadline":"2026-09-15 (تقديم الحزمة الأولى خلال 72 ساعة)","evidence":"40 من 47 قطاع حفر متبقٍ بحقل permit='لا يوجد'. المخزون المُصرّح = 1,186.86 م فقط = 21 يوم عمل بالمعدل الحالي."},{"id":"R-02","title":"تجويع الجبهات — الفرق ستنفد من العمل القانوني بتاريخ 2026-10-07","impact_m":1186.86,"impact_days":24,"probability":"عالية","severity":20,"severity_label":"حرجة","owner":"المقاول (التخطيط) + الاستشاري (الإنذار)","action":"لا تُضاف أي فرقة حفر جديدة قبل ضمان تصاريح تغطي 150 م/فرقة/أسبوع. حساب 'مخزون العمل المُصرّح بالأيام' يومياً ونشره في الداشبورد؛ إيقاف التعبئة الزائدة إذا نزل المخزون تحت 10 أيام.","deadline":"2026-09-19 (تفعيل مؤشر مخزون العمل المصرّح)","evidence":"1,186.86 م ÷ 56.8 م/يوم = 20.9 يوم عمل ≈ 25 يوم تقويمي من 12 سبتمبر. مضاعفة الفرق تُقدّم تاريخ التجويع إلى ~2026-09-22."},{"id":"R-03","title":"المسار الحرج الحقيقي — شارع الأمير تركي A-10: 854 م بعمق 6.5→2.5 م بلا تصريح وبلا تدعيم مُعبّأ","impact_m":854.0,"impact_days":35,"probability":"عالية","severity":25,"severity_label":"حرجة","owner":"المقاول (التنفيذ والتدعيم) + الاستشاري (اعتماد تصميم الـshoring)","action":"مسار متوازٍ فوري: (أ) تقديم طلب التصريح + مخطط تحويل مروري لشارع رئيسي، (ب) اعتماد تصميم تدعيم الخندق (trench shields/sheet piling) موقّع من مهندس مختص، (ج) التعاقد على تأجير 3 أطقم تدعيم + مضخات نزح، (د) تقسيم الـ854 م إلى 3 جبهات عمل بحد أدنى 250 م لكل جبهة.","deadline":"2026-09-19 (التصريح + تصميم التدعيم + أمر شراء المعدات خلال 7 أيام)","evidence":"854 م ÷ 8 م/يوم/فرقة = 106.8 يوم-فرقة. بأقصى 3 فرق = 35.6 يوم عمل = 42 يوم تقويمي. مع تصريح 21 يوم: انتهاء الحفر ~2026-11-14 وتسليم ~2026-12-05. آخر موعد مسؤول لتقديم التصريح كان 2026-08-10 — متأخر 33 يوماً."},{"id":"R-04","title":"خط الخرج — 600 م مجهول بالكامل (لا رقم خط، لا عمق، لا تصريح، لا حالة)","impact_m":600.0,"impact_days":30,"probability":"عالية","severity":20,"severity_label":"حرجة","owner":"الاستشاري (التحقق الفني) + الجهة المالكة (تأكيد النطاق)","action":"جلسة تحقق نطاق خلال 5 أيام: تثبيت رقم الخط، منسوب/عمق الحفر، القطر، مسار الخط، الجهة صاحبة الطريق (أمانة أم وزارة النقل إن كان خارج النطاق البلدي)، وهل هو ضمن العقد أصلاً. إن ثبت أنه بعمق >3 م يُنقل فوراً إلى فئة المسار الحرج مع A-10.","deadline":"2026-09-17 (تقرير تحقق نطاق موقّع)","evidence":"السجل رقم 59: line=null, depth=null, status='غير محدد'. ثاني أكبر بند منفرد = 7.3% من إجمالي المتبقي. افتراض العمق 1.88 م في البيانات غير مُثبت ويُخفي الخطر."},{"id":"R-05","title":"نقص التعبئة — فرقتا حفر فعليتان مقابل 10–12 فرقة مطلوبة","impact_m":5925.2,"impact_days":137,"probability":"عالية","severity":25,"severity_label":"حرجة","owner":"المقاول","action":"خطة تعبئة موثقة: من فرقتين إلى 6 فرق خلال 14 يوماً ثم 10 فرق خلال 21 يوماً (حفار + شاحنة + طاقم تمديد + ضاغط لكل فرقة)، مع عقود تأجير معدات موقّعة وكشف عمالة بالأسماء والإقامات. يقدّم المقاول خطة التعبئة خلال 5 أيام وإلا تُفعّل بنود التقصير.","deadline":"2026-09-17 (خطة التعبئة) / 2026-09-26 (6 فرق على الأرض)","evidence":"إجمالي العمل = 293.5 يوم-فرقة معدّل حسب العمق. بفرقتين = 147 يوم عمل → انتهاء 2027-03. المطلوب 12 فرقة لملامسة الموعد."},{"id":"R-06","title":"44 قطاعاً (4,514 م = 55% من المتبقي) بحالة 'غير جارٍ' — صفر جبهات مفتوحة فيها","impact_m":4514.0,"impact_days":45,"probability":"عالية","severity":16,"severity_label":"عالية","owner":"المقاول (فتح الجبهات) + الاستشاري (تسليم المواقع)","action":"فتح 6 جبهات عمل إضافية على القطاعات المُصرّحة خلال أسبوع، وتجهيز 'حزمة جاهزية جبهة' لكل قطاع (تصريح + تحديد مرافق + تحويل مروري + مواد في الموقع) قبل بدء الحفر بـ5 أيام.","deadline":"2026-09-19 (6 جبهات مفتوحة) / 2026-10-03 (10 جبهات)","evidence":"42 قطاعاً بمرحلة 'لم يتم البدء' (4,339.14 م) + قطاعان بمرحلة 'تجهيز موقع' (621 م)."},{"id":"R-07","title":"المياه الجوفية والانهيارات عند عمق 6.25–6.5 م (954 م بالمجمل)","impact_m":954.23,"impact_days":21,"probability":"متوسطة","severity":15,"severity_label":"عالية","owner":"المقاول (السلامة والنزح) + الاستشاري (الاعتماد)","action":"جسّات استكشافية (test pits) على A-10 وA-11 لتحديد منسوب المياه قبل الحفر؛ خطة نزح (well-point أو مضخات غاطسة) + تصريح تصريف المياه المنزوحة؛ اعتماد نظام تدعيم إلزامي لكل عمق >1.5 م حسب اشتراطات السلامة.","deadline":"2026-09-24 (تقرير الجسّات + خطة النزح معتمدة)","evidence":"4 قطاعات بعمق >3 م = 954.23 م، إنتاجيتها المفترضة 8 م/يوم/فرقة أي 25% من الإنتاجية السطحية، وتستهلك 119.3 من 293.5 يوم-فرقة (41% من الجهد مقابل 16% من الأمتار)."},{"id":"R-08","title":"اختناق الأعمال اللاحقة (دفان/أسفلت) في الأسبوعين الأخيرين","impact_m":3965.7,"impact_days":14,"probability":"عالية","severity":16,"severity_label":"عالية","owner":"المقاول (الموارد) + الأمانة (اعتماد إعادة السفلتة)","action":"تعبئة طاقمَي دفان وضاغط + مقاول أسفلت ثانٍ الآن لا لاحقاً؛ حجز مواعيد فحص واعتماد إعادة السفلتة مسبقاً مع الأمانة؛ اعتماد مبدأ 'لا حفر جديد قبل إقفال الخندق السابق خلال 5 أيام'.","deadline":"2026-09-26 (عقد مقاول الأسفلت الثاني موقّع)","evidence":"الحفر يجب أن ينتهي قبل 10–15 يوماً من التسليم، أي المعدل المطلوب يقفز من 120.9 إلى 151.9–174.3 م/يوم. حالياً 10 قطاعات عالقة بمرحلة الأسفلت (722.74 م) رغم اكتمال حفرها."},{"id":"R-09","title":"العوائق تحت الأرض غير المكتشفة (كهرباء/مياه/اتصالات)","impact_m":1500.0,"impact_days":12,"probability":"متوسطة","severity":12,"severity_label":"متوسطة","owner":"المقاول (الكشف) + الجهة المالكة (التنسيق مع أصحاب المرافق)","action":"مسح جيوفيزيائي (GPR) + حفر يدوي استكشافي على القطاعات المُصرّحة قبل دخول الحفار بـ48 ساعة؛ اتفاقيات تنسيق مسبقة مع السعودية للكهرباء وشركة المياه والاتصالات مع جهة اتصال مسماة واستجابة خلال 24 ساعة.","deadline":"2026-09-22 (بروتوكول الكشف المسبق مفعّل)","evidence":"معوق أكده العميل. تجربة المشاريع المماثلة: 15–25% من الأمتار تتأثر بتعطل 1–3 أيام لكل حادثة تعارض."},{"id":"R-10","title":"ضعف انضباط البيانات — أيام بإنتاج صفري بلا تفسير وسجلات ناقصة/مكررة","impact_m":0.0,"impact_days":9,"probability":"عالية","severity":9,"severity_label":"متوسطة","owner":"الاستشاري (الإشراف والتوثيق) + المقاول (التقرير اليومي)","action":"تقرير يومي إلزامي بصيغة موحّدة (أمتار/فرقة/جبهة + سبب أي توقف مصنّف)؛ رفض المستخلص الشهري إن نقص أكثر من يومين تقرير؛ تصحيح ازدواجية رقم القطاع 43 وتعبئة الحقول الناقصة للسجل 59.","deadline":"2026-09-16 (النموذج الموحد قيد التطبيق)","evidence":"يوم 9 سبتمبر = 0 م بوصف 'لا يوجد تسجيل' (17% من أيام السجل). رقم القطاع 43 مكرر لصفّين (568 م و286 م). السجل 59 بثلاثة حقول فارغة."}],"criticalPath":[{"rank":1,"segment":"شارع الأمير تركي (قطعتان: 568 م + 286 م)","line":"A-10","length":854.0,"reason":"المسار الحرج الفعلي للمشروع. عمق 6.5→2.5 م يتطلب تدعيم جوانب ونزح، إنتاجية ~8 م/يوم/فرقة = 106.8 يوم-فرقة (41% من جهد المشروع مقابل 14% من أمتاره). بلا تصريح وبلا تعبئة تدعيم. حتى بـ3 فرق وتصريح فوري: انتهاء الحفر 2026-11-14 والتسليم 2026-12-05 — أي انزلاق 35 يوماً كحد أدنى. آخر موعد مسؤول للتصريح فات منذ 2026-08-10."},{"rank":2,"segment":"خط الخرج","line":"غير محدد","length":600.0,"reason":"ثاني أطول بند ومجهول بالكامل: لا رقم خط ولا عمق ولا تصريح ولا حالة تشغيل. لا يمكن تسعير مدته ولا تخطيطه. إن تبيّن أنه خط رئيسي عميق فسينافس A-10 على المرتبة الأولى. خطر المجهول يجب إغلاقه خلال 5 أيام قبل أي قرار جدولة."},{"rank":3,"segment":"شارع المباركة","line":"A-11-4","length":695.12,"reason":"أطول قطاع مُصرّح وجارٍ فعلياً — يمثل المخزون الرئيسي للعمل القانوني اليوم. سطحي (1.88 م) و21.7 يوم-فرقة. أي توقف فيه يُجوّع الفرق فوراً لأن البدائل المُصرّحة لا تتجاوز 491 م."},{"rank":4,"segment":"شارع الملك سلمان","line":"A-11","length":81.0,"reason":"عمق 6.25 م — 10.1 يوم-فرقة لـ81 م فقط. آخر موعد مسؤول لتقديم تصريحه هو اليوم 2026-09-12 (صفر احتياطي). صغير بالأمتار لكن مدته تعادل قطاعاً سطحياً بطول 320 م."},{"rank":5,"segment":"شارع أحد (A-11-1-1 و A-11-1-2) + شارع الثبات (A-11-4)","line":"A-11-1-1 / A-11-1-2 / A-11-4","length":730.69,"reason":"ثلاثة قطاعات متوسطة الطول بلا تصريح ولم يُبدأ بها. مجتمعة 22.8 يوم-فرقة. آخر موعد مسؤول للتصريح 2026-09-30 — يمكن إنقاذها إن صدرت التصاريح خلال أسبوعين."},{"rank":6,"segment":"شارع القادسية (A-6, 2.66 م) + خط الطرد الملك فيصل (LINE P, 2.7 م)","line":"A-6 / LINE P","length":110.0,"reason":"أعماق متوسطة (2.66–2.7 م) بلا تصريح، وخط الطرد عادةً يستلزم اشتراطات فنية واعتمادات إضافية. صغيران لكنهما يقعان في نهاية سلسلة التشغيل ويمكن أن يعطّلا شهادة الإنجاز."},{"rank":7,"segment":"حزمة 33 قطاعاً سطحياً بلا تصريح (≤2.5 م)","line":"متعددة","length":3074.11,"reason":"ليست حرجة فردياً (4–5 أيام لكل قطاع) لكنها حرجة كحزمة: 96 يوم-فرقة. تصبح حرجة تلقائياً إن تأخرت تصاريحها بعد 2026-10-03، وهي المادة الخام الوحيدة لتشغيل أي فرق إضافية تُعبّأ."}],"recovery":{"immediate":[{"action":"تقديم 40 طلب تصريح دفعةً واحدة في 3 حزم مرتبة بأولوية المسار الحرج (حزمة 1: A-10 وA-11 العميقة وخط الخرج؛ حزمة 2: قطاعات >200 م؛ حزمة 3: الباقي)","owner":"المقاول — منسق تصاريح متفرغ","metric":"40 طلباً مُقدّماً ومُستلماً برقم قيد","deadline":"2026-09-15"},{"action":"خطاب تصعيد رسمي من المالك إلى الأمانة/البلدية يطلب مساراً معجّلاً بسقف زمني 10 أيام عمل للإصدار","owner":"الجهة المالكة","metric":"خطاب صادر + موعد اجتماع مثبّت","deadline":"2026-09-16"},{"action":"جلسة تحقق نطاق لخط الخرج (600 م): رقم الخط، العمق، القطر، المسار، الجهة المالكة للطريق، والتأكد أنه ضمن العقد","owner":"الاستشاري + الجهة المالكة","metric":"تقرير موقّع يُغلق الحقول الثلاثة الفارغة","deadline":"2026-09-17"},{"action":"اعتماد تصميم تدعيم الخندق لـA-10 + أمر شراء/تأجير 3 أطقم تدعيم ومضخات نزح","owner":"المقاول + الاستشاري","metric":"تصميم معتمد + أمر شراء موقّع","deadline":"2026-09-19"},{"action":"خطة تعبئة موثقة من المقاول: 6 فرق خلال 14 يوماً و10 فرق خلال 21 يوماً بعقود معدات وكشف عمالة","owner":"المقاول","metric":"خطة معتمدة + عقود تأجير موقّعة","deadline":"2026-09-17"},{"action":"تفعيل التقرير اليومي الموحّد (أمتار/فرقة/جبهة + تصنيف أسباب التوقف) وتصحيح ازدواجية القطاع 43","owner":"الاستشاري","metric":"صفر أيام بلا تقرير","deadline":"2026-09-16"},{"action":"فتح 4 جبهات حفر إضافية على المخزون المُصرّح (1,186.86 م) فوراً","owner":"المقاول","metric":"6 جبهات مفتوحة (من 2)","deadline":"2026-09-19"}],"short":[{"action":"تشغيل 3 جبهات متوازية على A-10 بطول ≥250 م لكل جبهة مع أطقم التدعيم","owner":"المقاول","metric":"3 جبهات عميقة نشطة + ≥24 م/يوم على A-10","deadline":"2026-09-26"},{"action":"الوصول إلى 6 فرق حفر عاملة فعلياً وإنتاج ≥110 م/يوم","owner":"المقاول","metric":"110 م/يوم متوسط أسبوعي","deadline":"2026-09-26"},{"action":"استلام الحزمة الأولى من التصاريح (≥15 تصريحاً تغطي ≥2,000 م)","owner":"الجهة المالكة/الأمانة","metric":"15 تصريحاً صادراً","deadline":"2026-09-29"},{"action":"جسّات استكشافية ومسح GPR على القطاعات العميقة وتقرير منسوب المياه الجوفية","owner":"المقاول + الاستشاري","metric":"تقرير جسّات لـ4 قطاعات عميقة","deadline":"2026-09-24"},{"action":"تعبئة طاقمَي دفان إضافيين والتعاقد على مقاول أسفلت ثانٍ لإقفال 722.74 م العالقة بمرحلة الأسفلت","owner":"المقاول","metric":"صفر قطاعات عالقة بالأسفلت >10 أيام","deadline":"2026-09-26"},{"action":"إعداد وتقديم مطالبة تمديد مدة (EOT) موثّقة مبنية على عدم إصدار التصاريح بوصفه خطراً على المالك/الأمانة","owner":"المقاول (الإعداد) + الاستشاري (التقييم)","metric":"مطالبة مقدّمة بسجل زمني كامل","deadline":"2026-09-30"},{"action":"تجميد توظيف فرق إضافية ما لم يتجاوز 'مخزون العمل المُصرّح' 10 أيام لكل فرقة","owner":"الاستشاري (بوابة التحكم)","metric":"مخزون العمل المُصرّح ≥10 أيام","deadline":"2026-09-26"}],"medium":[{"action":"الوصول إلى 10–12 فرقة حفر وإنتاج مستقر ≥170 م/يوم","owner":"المقاول","metric":"170 م/يوم متوسط أسبوعي ولمدة 3 أسابيع متتالية","deadline":"2026-10-10"},{"action":"إصدار 100% من التصاريح الأربعين","owner":"الجهة المالكة/الأمانة","metric":"صفر قطاعات بلا تصريح","deadline":"2026-10-13"},{"action":"إغلاق حفر كامل القطاعات السطحية (3,965.7 م)","owner":"المقاول","metric":"صفر قطاعات سطحية بمرحلة 'لم يتم البدء'","deadline":"2026-10-20"},{"action":"تسليم جزئي معتمد للحزمة الأولى (2,314.81 م منجزة الحفر) بشهادة إنجاز جزئي","owner":"الجهة المالكة + الاستشاري","metric":"شهادة تسليم ابتدائي جزئي لـ≥2,300 م","deadline":"2026-10-31"},{"action":"إعادة جدولة تعاقدية معتمدة بتاريخ تسليم واقعي وإعادة ترتيب المشروع على 3 مراحل تسليم","owner":"الجهة المالكة","metric":"ملحق عقد موقّع بجدول محدّث","deadline":"2026-10-15"},{"action":"إغلاق حفر A-10 (854 م) والقطاعات العميقة","owner":"المقاول","metric":"854 م حفر منجز","deadline":"2026-11-14"}]},"indicators":[{"name":"تصاريح صادرة أسبوعياً","target":12,"unit":"تصريح/أسبوع","why":"بمعدل 12 تصريحاً أسبوعياً تُغلق الأربعون خلال 3.5 أسبوع. أي معدل أقل من 8 يعني أن التصاريح تبقى المسار الحرج حتى نوفمبر. هذا المؤشر يسبق الإنتاج بأسبوعين كاملين."},{"name":"مخزون العمل المُصرّح (Permitted Work Backlog)","target":10,"unit":"يوم عمل لكل فرقة","why":"أهم مؤشر منفرد. اليوم = 21 يوماً لفرقتين لكنه ينهار إلى 5 أيام عند 6 فرق. إذا نزل تحت 10 أيام فالفرق ستتوقف بعد أسبوعين مهما بلغ عدد المعدات."},{"name":"جبهات الحفر المفتوحة فعلياً","target":10,"unit":"جبهة","why":"المؤشر الوحيد الذي يفسّر سقف الإنتاج. الجبهتان الحاليتان تفسران تماماً الـ56.8 م/يوم. لا يمكن تجاوز 60 م/يوم بجبهتين مهما بلغت الإدارة."},{"name":"نسبة القطاعات الجارية","target":75,"unit":"%","why":"حالياً 14 من 60 = 23% فقط (44 قطاعاً 'غير جارٍ'). النسبة تقيس اتساع الهجوم لا سرعته، وارتفاعها يسبق ارتفاع الأمتار بـ5–7 أيام."},{"name":"أيام التوقف الصفري","target":0,"unit":"يوم/أسبوع","why":"يوم صفري واحد في 6 أيام = فقد 17% من الطاقة = ما يعادل 56.8 م. بالمعدل المطلوب 151.9 م/يوم يصبح اليوم الصفري خسارة 152 م لا يمكن تعويضها."},{"name":"إنتاجية الفرقة الواحدة","target":32,"unit":"م/يوم/فرقة (سطحي)","why":"حالياً 28.4 م/يوم = 81% من المعيار. يفصل بين مشكلة 'عدد الفرق' ومشكلة 'كفاءة الفرقة' — وهما علاجان مختلفان تماماً."},{"name":"إنتاجية الجبهات العميقة (A-10)","target":24,"unit":"م/يوم (3 فرق × 8)","why":"المسار الحرج. أي يوم دون 24 م على A-10 ينزلق تاريخ التسليم يوماً كاملاً بصرف النظر عن أداء بقية المشروع."},{"name":"زمن دورة التصريح (تقديم → إصدار)","target":10,"unit":"يوم عمل","why":"يحدد آخر موعد مسؤول لكل قطاع. كل يوم زيادة في زمن الدورة يستهلك يوماً من الاحتياطي المتبقي لـ33 قطاعاً سطحياً دفعة واحدة."},{"name":"فجوة الأعمال اللاحقة (متر محفور غير مُقفل)","target":400,"unit":"متر","why":"مؤشر مبكر لاختناق الدفان/الأسفلت. حالياً 722.74 م عالقة بمرحلة الأسفلت. تجاوز 400 م يعني أن الحفر يسبق قدرة الإقفال وأن التسليم سيتعطل حتى لو اكتمل الحفر."},{"name":"جاهزية الجبهة قبل البدء (Front Readiness)","target":5,"unit":"جبهة جاهزة مسبقاً","why":"عدد الجبهات التي اكتملت لها حزمة الجاهزية (تصريح + كشف مرافق + تحويل مروري + مواد). خمس جبهات جاهزة = حماية أسبوع كامل من التوقف. صفر اليوم."},{"name":"ساعات تشغيل الحفار الفعلية","target":8,"unit":"ساعة/يوم/حفار","why":"يكشف التوقفات المخفية (انتظار مواد، تعارض مرافق، أعطال) التي لا تظهر في تقرير الأمتار إلا بعد أسبوع."},{"name":"حوادث تعارض المرافق تحت الأرض","target":1,"unit":"حادثة/أسبوع كحد أقصى","why":"كل حادثة تعطّل جبهة 1–3 أيام. ارتفاعها فوق حادثتين أسبوعياً مؤشر على ضعف الكشف المسبق وليس على سوء الحظ."}],"initialLog":[{"d":"2026-09-05","m":38,"n":"","cr":2},{"d":"2026-09-06","m":57,"n":"","cr":2},{"d":"2026-09-07","m":38,"n":"","cr":2},{"d":"2026-09-08","m":51,"n":"","cr":2},{"d":"2026-09-09","m":0,"n":"يوم بلا إنتاج مسجّل — يلزم تقرير سبب","cr":2},{"d":"2026-09-10","m":100,"n":"أعلى إنتاج مسجّل","cr":2}]};
+(function(){
+"use strict";
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const M=D.meta, TH=D.thresholds;
+const nf=(v,d)=>Number(v).toLocaleString('en-US',{minimumFractionDigits:d||0,maximumFractionDigits:d===undefined?0:d});
+const AR_MON=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const AR_DAY=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+function fd(s){const p=s.split('-');return +p[2]+' '+AR_MON[+p[1]-1]+(p[0]!=='2026'?' '+p[0]:'')}
+function fdl(s){const p=s.split('-');return +p[2]+' '+AR_MON[+p[1]-1]+' '+p[0]}
+function dow(s){return AR_DAY[new Date(s+'T00:00:00Z').getUTCDay()]}
+function addD(s,n){const t=new Date(s+'T00:00:00Z');t.setUTCDate(t.getUTCDate()+n);return t.toISOString().slice(0,10)}
+function diffD(a,b){return Math.round((new Date(b+'T00:00:00Z')-new Date(a+'T00:00:00Z'))/864e5)}
+/* أيام العمل = كل الأيام عدا الجمعة */
+function workdays(a,b){let n=0;for(let d=addD(a,1);d<=b;d=addD(d,1)){if(new Date(d+'T00:00:00Z').getUTCDay()!==5)n++}return n}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ---------- theme ---------- */
+const root=document.documentElement;
+$('#themeBtn').addEventListener('click',()=>{
+  const cur=root.getAttribute('data-theme');
+  const sysDark=matchMedia('(prefers-color-scheme: dark)').matches;
+  const now=cur||(sysDark?'dark':'light');
+  root.setAttribute('data-theme',now==='dark'?'light':'dark');
+  requestAnimationFrame(renderCharts);
+});
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>requestAnimationFrame(renderCharts));
+
+/* ---------- tabs ---------- */
+$$('.tab').forEach(t=>t.addEventListener('click',()=>{
+  $$('.tab').forEach(x=>{x.setAttribute('aria-selected',String(x===t));$('#'+x.getAttribute('aria-controls')).hidden=(x!==t)});
+  requestAnimationFrame(renderCharts);
+}));
+
+/* ---------- state ---------- */
+let LOG={};           // date -> {d,m,cr,fr,pm,n}
+D.initialLog.forEach(e=>LOG[e.d]={d:e.d,m:e.m,cr:e.cr,fr:2,pm:0,n:e.n});
+let db=null, ro=false;
+
+/* ---------- derived metrics ---------- */
+function entries(){return Object.values(LOG).sort((a,b)=>a.d<b.d?-1:1)}
+function tracked(){return entries().filter(e=>e.d>=M.dataDate)}
+function hist(){return entries().filter(e=>e.d<M.dataDate)}
+function metrics(){
+  const all=entries(), tr=tracked();
+  const doneM=tr.reduce((s,e)=>s+(+e.m||0),0);
+  const remain=Math.max(0,M.excM-doneM);
+  const last=all.length?all[all.length-1]:null;
+  const recent=all.slice(-7);
+  const ma7=recent.length?recent.reduce((s,e)=>s+(+e.m||0),0)/recent.length:0;
+  const today=new Date().toISOString().slice(0,10);
+  const asOf=last&&last.d>M.dataDate?last.d:M.dataDate;
+  const daysLeft=Math.max(0,diffD(asOf,M.target));
+  const wdTarget=Math.max(1,workdays(asOf,M.target));
+  const wdExc=Math.max(1,workdays(asOf,M.excDeadline));
+  const reqNow=remain/wdTarget;
+  const reqExc=remain/wdExc;
+  const rate=ma7>0?ma7:M.crewRate*M.crews;
+  const finishDays=rate>0?Math.ceil(remain/rate):9999;
+  const finish=addD(asOf,finishDays);
+  const crews=last&&last.cr?+last.cr:M.crews;
+  const permStockM=Math.max(0,M.permM-doneM);
+  /* مخزون العمل المصرَّح يُقاس بالمعدل المطلوب — لا بالمعدل المتعثّر الحالي */
+  const permDaysAtReq=reqExc>0?permStockM/reqExc:0;
+  const permDaysNow=rate>0?permStockM/rate:0;
+  const permDaysAt6=permStockM/(6*M.crewRate);
+  return {doneM,remain,ma7,last,daysLeft,wdTarget,wdExc,reqNow,reqExc,rate,finishDays,finish,crews,
+          permStockM,permDaysAtReq,permDaysNow,permDaysAt6,asOf,today,pct:doneM/M.excM*100};
+}
+function level(v,req){
+  const r=v/(req||M.reqRateExcDl);
+  if(r>=.95)return{k:'good',l:'آمن'};
+  if(r>=.75)return{k:'warn',l:'تحذير'};
+  if(r>=.50)return{k:'ser',l:'خطر'};
+  return{k:'crit',l:'حرج'};
+}
+
+/* ---------- KPIs ---------- */
+function renderKPIs(){
+  const x=metrics();
+  const lv=level(x.rate,x.reqExc);
+  const permLv=x.permDaysAtReq>=10?'good':x.permDaysAtReq>=5?'warn':'crit';
+  const k=[
+    ['أيام حتى التسليم',nf(x.daysLeft),'يوم','crit','الموعد 31 أكتوبر 2026'],
+    ['الحفر المتبقي',nf(x.remain),'م','crit',nf(x.remain/M.excM*100,0)+'% من نطاق الحفر'],
+    ['المعدل الفعلي',nf(x.rate,1),'م/يوم',lv.k,'متوسط آخر '+Math.min(7,entries().length)+' أيام'],
+    ['المعدل المطلوب',nf(x.reqExc,0),'م/يوم','crit',nf(x.wdExc)+' يوم عمل حتى 21 أكتوبر'],
+    ['مخزون العمل المُصرَّح',nf(x.permDaysAtReq,1),'يوم عمل',permLv,nf(x.permStockM)+' م مُصرَّحة بالمعدل المطلوب'],
+    ['تاريخ إنهاء الحفر المتوقع',x.finishDays>900?'—':fd(x.finish),'','crit',x.finishDays>900?'المعدل صفر':(diffD(M.excDeadline,x.finish)>0?'متأخر '+nf(diffD(M.excDeadline,x.finish))+' يوماً':'ضمن المستهدف')],
+  ];
+  $('#kpis').innerHTML=k.map(([a,b,c,d,e])=>
+    `<div class="kpi"><span class="k">${a}</span><span class="v num">${b}${c?` <span class="u">${c}</span>`:''}</span><span class="s c-${d}"><i class="dot bg-${d}"></i>${esc(e)}</span></div>`).join('');
+  $('#cdDays').textContent=nf(x.daysLeft);
+  $('#cdM').textContent=nf(x.remain);
+}
+
+/* ---------- insights engine ---------- */
+function renderInsights(){
+  const x=metrics(), out=[];
+  const all=entries(), tr=tracked();
+  const lv=level(x.rate,x.reqExc);
+  const LBL={good:'آمن',warn:'تحذير',ser:'خطر',crit:'حرج'};
+
+  out.push({k:lv.k,t:'مستوى الأداء: '+LBL[lv.k],
+    b:`المعدل الجاري <b>${nf(x.rate,1)} م/يوم</b> مقابل <b>${nf(x.reqExc,0)} م/يوم</b> مطلوبة — أي <b>${nf(x.rate/x.reqExc*100,0)}%</b> من المطلوب. بهذا المعدل ينتهي الحفر في <b>${x.finishDays>900?'أجل غير محدد':fdl(x.finish)}</b>${x.finishDays<=900&&diffD(M.excDeadline,x.finish)>0?` — متأخراً <b>${nf(diffD(M.excDeadline,x.finish))} يوماً</b> عن الموعد اللازم لإنهاء الحفر.`:'.'}`});
+
+  if(x.permDaysAtReq<10)
+    out.push({k:x.permDaysAtReq<5?'crit':'warn',t:'مخزون العمل المُصرَّح منخفض',
+      b:`المتاح للحفر قانونياً <b>${nf(x.permStockM)} م</b> فقط = <b>${nf(x.permDaysAtReq,1)} يوم عمل بالمعدل المطلوب</b> (المستهدف ≥ 10). بالمعدل المتعثّر الحالي يبدو كافياً لـ <b>${nf(x.permDaysNow,0)} يوماً</b>، وهذا بالضبط ما يخدع التقارير: بمجرد التعبئة إلى ست فرق ينكمش المخزون إلى <b>${nf(x.permDaysAt6,1)} أيام</b>. <b>أي زيادة في عدد الفرق قبل صدور التصاريح تُنتج فرقاً عاطلة مدفوعة الأجر لا أمتاراً.</b>`});
+
+  const last=x.last;
+  if(last){
+    const l2=level(+last.m,x.reqExc);
+    out.push({k:l2.k,t:'آخر يوم مسجّل: '+fd(last.d)+' ('+dow(last.d)+')',
+      b:`<b>${nf(+last.m,1)} م</b> — ${LBL[l2.k]}. العتبات اليومية: آمن ≥ ${nf(TH.safe)} · تحذير ${nf(TH.warn)}–${nf(TH.safe)} · خطر ${nf(TH.danger)}–${nf(TH.warn)} · حرج < ${nf(TH.danger)}.${last.n?` <br>الملاحظة المسجّلة: «${esc(last.n)}»`:''}`});
+  }
+  const z=all.filter(e=>+e.m===0);
+  if(z.length) out.push({k:'ser',t:'أيام بلا إنتاج: '+nf(z.length),
+    b:`${z.map(e=>fd(e.d)).join(' · ')}. كل يوم صفري بالمعدل المطلوب يعني <b>${nf(x.reqExc,0)} متراً</b> غير قابلة للتعويض. القاعدة: أي يوم صفري يستوجب تقرير سبب إلزامياً خلال 24 ساعة.`});
+
+  const l2d=all.slice(-2);
+  if(l2d.length===2&&l2d.every(e=>+e.m<TH.warn))
+    out.push({k:'crit',t:'قاعدة تصعيد مُفعَّلة',b:`يومان متتاليان (${fd(l2d[0].d)} و${fd(l2d[1].d)}) دون <b>${nf(TH.warn)} م/يوم</b> ⇒ تصعيد فوري مع المقاول.`});
+  if(x.ma7>0&&x.ma7<TH.ma7act)
+    out.push({k:'crit',t:'متوسط 7 أيام دون عتبة الإجراء التعاقدي',b:`المتوسط <b>${nf(x.ma7,1)} م/يوم</b> أقل من <b>${nf(TH.ma7act)} م/يوم</b> — عتبة مراجعة الالتزام التعاقدي بخطة التعبئة.`});
+
+  if(tr.length===0)
+    out.push({k:'mute',t:'لم تبدأ المتابعة اليومية بعد',b:'أرقام 5–10 سبتمبر مُحمَّلة كخط أساس تاريخي للمعدل. سجّل إنجاز اليوم أعلاه وسيبدأ منحنى الإنجاز ومقارنة الفعلي بالمخطط في التحديث تلقائياً مع كل قيد.'});
+  else{
+    const bl=D.baseline.find(b=>b.d===x.asOf);
+    if(bl) out.push({k:x.doneM>=bl.cum*.95?'good':x.doneM>=bl.cum*.75?'warn':'crit',t:'الفعلي مقابل خط الأساس',
+      b:`المنجز التراكمي <b>${nf(x.doneM)} م</b> مقابل <b>${nf(bl.cum)} م</b> مخططة حتى ${fd(x.asOf)} — انحراف <b>${nf(x.doneM-bl.cum)} م</b> (<b>${nf(bl.cum>0?x.doneM/bl.cum*100:100,0)}%</b> من المخطط).`});
+  }
+
+  out.push({k:'mute',t:'التركيز الثابت: الحفر العميق',
+    b:`<b>${nf(M.deepM)} متراً</b> فقط (${nf(M.deepPctLen,0)}% من الأمتار) تستهلك <b>${nf(M.deepPctEff,0)}% من الجهد</b> — أبرزها شارع الأمير تركي A-10 بطول 854 م وعمق 6.5 م. أي خطة تقيس التقدّم بالأمتار وحدها ستبدو متقدّمة وهي متأخرة.`});
+
+  $('#insights').innerHTML='<div class="stack" style="gap:10px">'+out.map(o=>{
+    const c=o.k==='mute'?'':'p-'+o.k;
+    const ic={good:'●',warn:'▲',ser:'▲',crit:'■',mute:'○'}[o.k];
+    return `<div style="display:grid;grid-template-columns:auto 1fr;gap:11px;align-items:start;padding:12px 13px;background:var(--surf2);border-radius:9px;border-inline-start:3px solid var(--${o.k==='mute'?'line2':o.k==='ser'?'serious':o.k})">
+      <span class="pill ${c||'p-mute'}" style="margin-top:1px">${ic}</span>
+      <div><div style="font-weight:600;font-size:13.5px;margin-bottom:3px">${esc(o.t)}</div><div style="font-size:12.5px;color:var(--ink2);line-height:1.7" class="num">${o.b}</div></div></div>`;
+  }).join('')+'</div>';
+}
+
+/* ---------- charts ---------- */
+const cs=n=>getComputedStyle(root).getPropertyValue(n).trim();
+let tipEl=$('#tip');
+function bindTip(el,html){
+  el.addEventListener('mousemove',e=>{tipEl.innerHTML=html;tipEl.classList.add('on');
+    const w=tipEl.offsetWidth,h=tipEl.offsetHeight;
+    tipEl.style.left=Math.min(Math.max(8,e.clientX-w/2),innerWidth-w-8)+'px';
+    tipEl.style.top=Math.max(8,e.clientY-h-12)+'px';});
+  el.addEventListener('mouseleave',()=>tipEl.classList.remove('on'));
+}
+function svg(vb,inner){return `<svg class="chart" viewBox="${vb}" preserveAspectRatio="xMidYMid meet" role="img" direction="ltr" style="direction:ltr">${inner}</svg>`}
+
+function renderSCurve(){
+  const x=metrics();
+  const W=720,H=330,pL=18,pR=76,pT=18,pB=42;
+  const x0=pL,x1=W-pR,y0=pT,y1=H-pB;
+  const base=D.baseline, n=base.length;
+  const maxY=M.excM;
+  const px=i=>x0+(x1-x0)*i/(n-1);
+  const py=v=>y1-(y1-y0)*Math.min(v,maxY)/maxY;
+  let g='';
+  // grid + y labels (right side for RTL)
+  for(let i=0;i<=5;i++){const v=maxY*i/5,y=py(v);
+    g+=`<line x1="${x0}" y1="${y.toFixed(1)}" x2="${x1}" y2="${y.toFixed(1)}" stroke="${cs('--grid')}" stroke-width="1"/>`;
+    g+=`<text x="${x1+8}" y="${(y+4).toFixed(1)}" font-size="11" fill="${cs('--ink3')}" text-anchor="start">${nf(v)}</text>`;}
+  g+=`<text x="${x1+8}" y="${y0-6}" font-size="10.5" fill="${cs('--ink3')}" text-anchor="start">متر تراكمي</text>`;
+  // x labels
+  base.forEach((b,i)=>{if(i%7===0||i===n-1){
+    g+=`<text x="${px(i).toFixed(1)}" y="${y1+20}" font-size="10.5" fill="${cs('--ink3')}" text-anchor="middle">${fd(b.d)}</text>`;
+    g+=`<line x1="${px(i).toFixed(1)}" y1="${y1}" x2="${px(i).toFixed(1)}" y2="${y1+4}" stroke="${cs('--line2')}" stroke-width="1"/>`;}});
+  // baseline line
+  g+=`<path d="M${base.map((b,i)=>px(i).toFixed(1)+','+py(b.cum).toFixed(1)).join(' L')}" fill="none" stroke="${cs('--s1')}" stroke-width="2" stroke-linejoin="round"/>`;
+  g+=`<circle cx="${px(n-1).toFixed(1)}" cy="${py(maxY).toFixed(1)}" r="4" fill="${cs('--s1')}"/>`;
+  g+=`<text x="${px(n-1).toFixed(1)}" y="${(py(maxY)-11).toFixed(1)}" font-size="11" font-weight="600" fill="${cs('--s1')}" text-anchor="end">100% · 21 أكتوبر</text>`;
+  // actual
+  const tr=tracked(); let cum=0; const act=[{i:0,v:0,d:M.dataDate}];
+  base.forEach((b,i)=>{const e=LOG[b.d];if(e&&i>0){cum+=(+e.m||0);act.push({i,v:cum,d:b.d})}});
+  if(act.length>1){
+    g+=`<path d="M${act.map(a=>px(a.i).toFixed(1)+','+py(a.v).toFixed(1)).join(' L')}" fill="none" stroke="${cs('--s2')}" stroke-width="2.5" stroke-linejoin="round"/>`;
+    const la=act[act.length-1];
+    g+=`<circle cx="${px(la.i).toFixed(1)}" cy="${py(la.v).toFixed(1)}" r="4.5" fill="${cs('--s2')}" stroke="${cs('--surf')}" stroke-width="2"/>`;
+    g+=`<text x="${px(la.i).toFixed(1)}" y="${(py(la.v)-11).toFixed(1)}" font-size="11" font-weight="600" fill="${cs('--s2')}" text-anchor="middle">${nf(la.v)} م</text>`;
+  }else{
+    g+=`<circle cx="${px(0).toFixed(1)}" cy="${py(0).toFixed(1)}" r="4.5" fill="${cs('--s2')}" stroke="${cs('--surf')}" stroke-width="2"/>`;
+  }
+  // projection
+  const start=act[act.length-1], rate=x.rate;
+  const proj=[[start.i,start.v]];
+  for(let i=start.i+1;i<n;i++)proj.push([i,Math.min(maxY,start.v+rate*(i-start.i))]);
+  g+=`<path d="M${proj.map(p=>px(p[0]).toFixed(1)+','+py(p[1]).toFixed(1)).join(' L')}" fill="none" stroke="${cs('--s3')}" stroke-width="2.5" stroke-dasharray="7 5" stroke-linejoin="round"/>`;
+  const lp=proj[proj.length-1];
+  g+=`<circle cx="${px(lp[0]).toFixed(1)}" cy="${py(lp[1]).toFixed(1)}" r="4" fill="${cs('--s3')}"/>`;
+  g+=`<text x="${px(lp[0]).toFixed(1)}" y="${(py(lp[1])+18).toFixed(1)}" font-size="11" font-weight="600" fill="${cs('--s3')}" text-anchor="end">${nf(lp[1])} م · ${nf(lp[1]/maxY*100,0)}%</text>`;
+  // shortfall annotation
+  const sy=(py(lp[1])+py(maxY))/2;
+  g+=`<line x1="${px(n-1).toFixed(1)}" y1="${py(maxY).toFixed(1)}" x2="${px(n-1).toFixed(1)}" y2="${py(lp[1]).toFixed(1)}" stroke="${cs('--crit')}" stroke-width="1.5" stroke-dasharray="3 3"/>`;
+  g+=`<rect x="${px(n-1)-152}" y="${sy-13}" width="146" height="24" rx="6" fill="${cs('--crit-bg')}" stroke="${cs('--crit')}" stroke-opacity=".4"/>`;
+  g+=`<text x="${px(n-1)-79}" y="${sy+4}" font-size="11.5" font-weight="600" fill="${cs('--crit')}" text-anchor="middle">عجز ${nf(maxY-lp[1])} م</text>`;
+  // hover
+  base.forEach((b,i)=>{const e=LOG[b.d];const a=act.find(q=>q.i===i);
+    g+=`<rect data-i="${i}" x="${(px(i)-(x1-x0)/(n-1)/2).toFixed(1)}" y="${y0}" width="${((x1-x0)/(n-1)).toFixed(1)}" height="${y1-y0}" fill="transparent"/>`;});
+  const el=document.createElement('div'); el.innerHTML=svg(`0 0 ${W} ${H}`,g); $('#sCurve').innerHTML=''; $('#sCurve').appendChild(el.firstChild);
+  $$('#sCurve rect[data-i]').forEach(r=>{const i=+r.dataset.i,b=base[i];
+    let cu=0; for(let j=1;j<=i;j++){const e=LOG[base[j].d];if(e)cu+=(+e.m||0)}
+    const has=tracked().some(e=>e.d<=b.d&&e.d>M.dataDate);
+    bindTip(r,`<b>${fdl(b.d)} — ${dow(b.d)}</b>
+      <div class="r"><span>المخطط تراكمياً</span><span>${nf(b.cum)} م</span></div>
+      <div class="r"><span>الفعلي تراكمياً</span><span>${has?nf(cu)+' م':'—'}</span></div>
+      <div class="r"><span>المطلوب ذلك اليوم</span><span>${nf(b.day)} م</span></div>`);
+  });
+}
+
+function renderDaily(){
+  const all=entries().slice(-14);
+  if(!all.length){$('#dailyChart').innerHTML='';return}
+  const W=720,H=270,pL=18,pR=76,pT=22,pB=46;
+  const x0=pL,x1=W-pR,y0=pT,y1=H-pB;
+  const req=metrics().reqExc;
+  const maxY=Math.max(req*1.12,...all.map(e=>+e.m||0))||200;
+  const py=v=>y1-(y1-y0)*v/maxY;
+  const bw=Math.min(46,(x1-x0)/all.length*.62), step=(x1-x0)/all.length;
+  let g='';
+  // threshold bands
+  const bands=[[0,TH.danger,'--crit'],[TH.danger,TH.warn,'--serious'],[TH.warn,TH.safe,'--warn'],[TH.safe,maxY,'--good']];
+  bands.forEach(([a,b,c])=>{if(b<=a)return;
+    g+=`<rect x="${x0}" y="${py(Math.min(b,maxY)).toFixed(1)}" width="${x1-x0}" height="${Math.max(0,py(a)-py(Math.min(b,maxY))).toFixed(1)}" fill="${cs(c)}" opacity=".055"/>`});
+  for(let i=0;i<=4;i++){const v=maxY*i/4,y=py(v);
+    g+=`<line x1="${x0}" y1="${y.toFixed(1)}" x2="${x1}" y2="${y.toFixed(1)}" stroke="${cs('--grid')}" stroke-width="1"/>`;
+    g+=`<text x="${x1+8}" y="${(y+4).toFixed(1)}" font-size="11" fill="${cs('--ink3')}" text-anchor="start">${nf(v)}</text>`;}
+  g+=`<text x="${x1+8}" y="${y0-7}" font-size="10.5" fill="${cs('--ink3')}" text-anchor="start">متر/يوم</text>`;
+  // required line
+  const ry=py(req);
+  g+=`<line x1="${x0}" y1="${ry.toFixed(1)}" x2="${x1}" y2="${ry.toFixed(1)}" stroke="${cs('--crit')}" stroke-width="2" stroke-dasharray="6 4"/>`;
+  g+=`<rect x="${x0+4}" y="${ry-21}" width="148" height="18" rx="5" fill="${cs('--crit-bg')}"/>`;
+  g+=`<text x="${x0+10}" y="${(ry-8).toFixed(1)}" font-size="11" font-weight="600" fill="${cs('--crit')}">المطلوب ${nf(req)} م/يوم</text>`;
+  all.forEach((e,i)=>{
+    const v=+e.m||0, cx=x0+step*(i+.5), h=Math.max(v>0?3:0,y1-py(v));
+    const lv=level(v,req);
+    const col=cs(lv.k==='ser'?'--serious':'--'+lv.k);
+    g+=`<rect x="${(cx-bw/2).toFixed(1)}" y="${py(v).toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}" rx="4" fill="${col}"/>`;
+    g+=`<text x="${cx.toFixed(1)}" y="${(py(v)-7).toFixed(1)}" font-size="11" font-weight="600" fill="${cs('--ink')}" text-anchor="middle">${v?nf(v,0):'0'}</text>`;
+    g+=`<text x="${cx.toFixed(1)}" y="${y1+17}" font-size="10.5" fill="${cs('--ink3')}" text-anchor="middle">${e.d.slice(8)}/${e.d.slice(5,7)}</text>`;
+    g+=`<text x="${cx.toFixed(1)}" y="${y1+31}" font-size="10" fill="${cs('--ink3')}" text-anchor="middle">${dow(e.d).replace('ال','')}</text>`;
+  });
+  const el=document.createElement('div'); el.innerHTML=svg(`0 0 ${W} ${H}`,g);
+  $('#dailyChart').innerHTML=''; $('#dailyChart').appendChild(el.firstChild);
+  $$('#dailyChart rect[rx="4"]').forEach((r,i)=>{const e=all[i];if(!e)return;const lv=level(+e.m,req);
+    bindTip(r,`<b>${fdl(e.d)} — ${dow(e.d)}</b>
+      <div class="r"><span>المنجز</span><span>${nf(+e.m||0,1)} م</span></div>
+      <div class="r"><span>نسبة المطلوب</span><span>${nf((+e.m||0)/req*100,0)}%</span></div>
+      <div class="r"><span>التقييم</span><span>${lv.l}</span></div>
+      ${e.cr?`<div class="r"><span>الفرق</span><span>${e.cr}</span></div>`:''}
+      ${e.n?`<div style="margin-top:5px;color:var(--ink2)">${esc(e.n)}</div>`:''}`)});
+}
+
+function renderPerm(){
+  const x=metrics();
+  const permPct=M.permM/M.excM*100;
+  const lv=x.permDaysAtReq>=10?'good':x.permDaysAtReq>=5?'warn':'crit';
+  $('#permCard').innerHTML=`
+    <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:4px">
+      <span class="num" style="font-family:'Readex Pro';font-size:38px;line-height:1;letter-spacing:-.03em;color:var(--${lv})">${nf(x.permDaysAtReq,1)}</span>
+      <span style="font-size:13px;color:var(--ink2)">يوم عمل بالمعدل المطلوب · المستهدف ≥ 10</span>
+    </div>
+    <div style="font-size:12px;color:var(--ink2);margin-top:6px" class="num">
+      بالمعدل الحالي المتعثّر يبدو كافياً لـ <b style="color:var(--ink)">${nf(x.permDaysNow,0)} يوماً</b> — وعند ست فرق ينكمش إلى <b style="color:var(--crit)">${nf(x.permDaysAt6,1)} أيام</b>.
+    </div>
+    <div class="btrack" style="height:12px;margin:14px 0 10px">
+      <div class="bfill" style="width:${permPct.toFixed(1)}%;background:var(--s3)"></div>
+      <div class="bfill" style="width:${(100-permPct).toFixed(1)}%;background:var(--crit);opacity:.72"></div>
+    </div>
+    <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--ink2)" class="num">
+      <span><i class="dot bg-good" style="display:inline-block;background:var(--s3);margin-inline-end:5px"></i>مُصرَّح ${nf(M.permM)} م (${nf(permPct,0)}%)</span>
+      <span><i class="dot" style="display:inline-block;background:var(--crit);margin-inline-end:5px"></i>بلا تصريح ${nf(M.noPermM)} م (${nf(M.noPermPct,0)}%)</span>
+    </div>
+    <div class="callout" style="margin-top:16px;border-color:var(--crit);border-inline-start-color:var(--crit)">
+      <b>القيد الحاكم.</b> ${nf(M.noPermM)} متراً — <b>${nf(M.noPermPct,0)}% من الحفر المتبقي</b> — محجوزة قانونياً بلا تصريح. المتاح للحفر اليوم <b class="num">${nf(x.permStockM)} م</b> فقط. مضاعفة الفرق قبل صدور التصاريح <b>لا تزيد الإنتاج</b> — تزيد التكلفة فقط.
+    </div>
+    <div style="margin-top:14px;font-size:12px;color:var(--ink2);line-height:1.7">
+      <b style="color:var(--ink)">آخر موعد مسؤول فات:</b> تصريح A-10 (854 م) كان يجب تقديمه في 10 أغسطس — متأخر 33 يوماً. تصريح الملك سلمان A-11 موعده اليوم.
+    </div>`;
+}
+
+function renderLog(){
+  const req=metrics().reqExc;
+  const all=entries().slice().reverse();
+  $('#logTable').innerHTML=`<thead><tr><th>التاريخ</th><th>اليوم</th><th>الأمتار</th><th>% من المطلوب</th><th>التقييم</th><th>الفرق</th><th>الجبهات</th><th>تصاريح</th><th style="width:38%">ملاحظة</th></tr></thead><tbody>`+
+  all.map(e=>{const lv=level(+e.m,req);
+    return `<tr data-d="${e.d}" style="cursor:pointer"><td class="n">${fd(e.d)}${e.local?' <span class="pill p-warn">محلي</span>':''}</td><td>${dow(e.d)}</td>
+    <td class="n" style="font-weight:600">${nf(+e.m||0,1)}</td>
+    <td class="n">${nf((+e.m||0)/req*100,0)}%</td>
+    <td><span class="pill p-${lv.k}">${lv.l}</span></td>
+    <td class="n">${e.cr??'—'}</td><td class="n">${e.fr??'—'}</td><td class="n">${e.pm??'—'}</td>
+    <td style="color:var(--ink2);font-size:12px">${e.n?esc(e.n):'—'}</td></tr>`}).join('')+'</tbody>';
+  $$('#logTable tbody tr').forEach(tr=>tr.addEventListener('click',()=>{
+    const e=LOG[tr.dataset.d]; if(!e)return;
+    $('#inDate').value=e.d; $('#inM').value=e.m??''; $('#inCrews').value=e.cr??'';
+    $('#inFronts').value=e.fr??''; $('#inPerm').value=e.pm??''; $('#inNote').value=e.n||'';
+    $('#inM').focus(); $('#saveMsg').textContent='تم تحميل قيد '+fd(e.d)+' للتعديل';
+  }));
+}
+
+/* ---------- static panels ---------- */
+function renderForecast(){
+  $('#foreNote').innerHTML=`<b>كيف تُقرأ السيناريوهات.</b> كل سيناريو مبني على عدد الفرق ووتيرة صدور التصاريح، لا على التمنّي. السيناريو الوحيد الذي يصل إلى 31 أكتوبر يشترط <b>40 تصريحاً خلال 28 يوماً</b> و<b>8 فرق حفر بدل فرقتين خلال 3 أسابيع</b> و<b>3 أطقم تدعيم للحفر العميق خلال 12 يوماً</b> — وأيٌّ من هذه الشروط لم يتحقق بعد. الأقرب للواقع هو تسليم بين <b>22 نوفمبر</b> و<b>29 ديسمبر</b>.`;
+  $('#scenarios').innerHTML=D.scenarios.map(s=>{
+    const good=s.slip<=0, hi=s.key==='realistic';
+    const k=s.slip<=0?'good':s.slip<=30?'warn':s.slip<=70?'ser':'crit';
+    return `<div class="sc${hi?' hi':''}">
+      <div style="display:flex;justify-content:space-between;align-items:start;gap:8px">
+        <h4>${esc(s.name)}</h4>${hi?'<span class="pill p-mute">الأرجح</span>':''}
+      </div>
+      <div class="sub">${esc(s.sub)}</div>
+      <div><span style="font-size:11px;color:var(--ink2);display:block">تاريخ التسليم</span>
+        <span class="dd num c-${k}">${fdl(s.delivery)}</span></div>
+      <div class="slip c-${k}">${good?'ضمن الموعد بـ '+Math.abs(s.slip)+' أيام':'انزلاق '+nf(s.slip)+' يوماً'}</div>
+      <div style="display:flex;gap:14px;font-size:11.5px;color:var(--ink2);border-top:1px solid var(--line);padding-top:8px" class="num">
+        <span>${s.crews} فرق</span><span>${nf(s.rate,0)} م/يوم</span></div>
+      <ul>${s.cond.map(c=>`<li>${esc(c)}</li>`).join('')}</ul></div>`}).join('');
+
+  const shM=M.excM-M.deepM, shE=M.excEq-M.deepEq;
+  $('#depthSplit').innerHTML=`
+    <div class="bars">
+      <div class="brow"><span>الأمتار الطولية</span>
+        <div class="btrack"><div class="bfill" style="width:${(shM/M.excM*100).toFixed(1)}%;background:var(--s1)"></div><div style="width:2px;background:var(--surf)"></div><div class="bfill" style="width:${(M.deepM/M.excM*100-.3).toFixed(1)}%;background:var(--s2)"></div></div>
+        <span class="num" style="text-align:left">${nf(M.excM)} م</span></div>
+      <div class="brow"><span>الجهد الحقيقي</span>
+        <div class="btrack"><div class="bfill" style="width:${(shE/M.excEq*100).toFixed(1)}%;background:var(--s1)"></div><div style="width:2px;background:var(--surf)"></div><div class="bfill" style="width:${(M.deepEq/M.excEq*100-.3).toFixed(1)}%;background:var(--s2)"></div></div>
+        <span class="num" style="text-align:left">${nf(M.excEq)} مك</span></div>
+    </div>
+    <div class="legend" style="margin:14px 0 0"><span><i style="background:var(--s1)"></i>ضحل (≤ 2.5 م)</span><span><i style="background:var(--s2)"></i>عميق (أكثر من 2.5 م)</span></div>
+    <div class="tw" style="margin-top:14px"><table><thead><tr><th>الفئة</th><th>أمتار</th><th>% من الطول</th><th>أمتار مكافئة</th><th>% من الجهد</th></tr></thead><tbody>
+      <tr><td>ضحل</td><td class="n">${nf(shM)}</td><td class="n">${nf(100-M.deepPctLen,0)}%</td><td class="n">${nf(shE)}</td><td class="n">${nf(100-M.deepPctEff,0)}%</td></tr>
+      <tr><td>عميق</td><td class="n">${nf(M.deepM)}</td><td class="n">${nf(M.deepPctLen,0)}%</td><td class="n">${nf(M.deepEq)}</td><td class="n" style="font-weight:600;color:var(--crit)">${nf(M.deepPctEff,0)}%</td></tr>
+    </tbody></table></div>
+    <div class="callout" style="margin-top:14px"><b>الخلاصة.</b> ${nf(M.deepPctLen,0)}% من الأمتار تبتلع ${nf(M.deepPctEff,0)}% من الجهد. أي تقرير يقيس التقدّم بالأمتار وحدها سيُظهر المشروع متقدّماً بينما الجهد الحقيقي متأخر — ولهذا يحسب هذا الداشبورد <b>الأمتار المكافئة</b> بجانب الأمتار الخام.</div>`;
+
+  $('#weekTable').innerHTML=`<thead><tr><th>الأسبوع</th><th>ينتهي في</th><th>أيام عمل</th><th>المطلوب أسبوعياً</th><th>معدل يومي</th><th>تراكمي</th><th>%</th></tr></thead><tbody>`+
+    D.weekly.map(w=>`<tr><td class="n">${w.week}</td><td class="n">${fd(w.week_end)}</td><td class="n">${w.workdays}</td>
+    <td class="n">${nf(w.planned_m_week)}</td><td class="n" style="font-weight:600">${nf(w.required_daily_rate_m)}</td>
+    <td class="n">${nf(w.cumulative_planned_m)}</td><td class="n">${nf(w.cumulative_pct,0)}%</td></tr>`).join('')+'</tbody>';
+
+  $('#thresholds').innerHTML=`
+    <div class="grid3" style="gap:1px;background:var(--line);border:1px solid var(--line);border-radius:11px;overflow:hidden">
+      ${[['آمن','good','≥ '+nf(TH.safe),'95% فأكثر من المطلوب'],
+         ['تحذير','warn',nf(TH.warn)+' – '+nf(TH.safe),'75–95% من المطلوب'],
+         ['خطر','ser',nf(TH.danger)+' – '+nf(TH.warn),'50–75% من المطلوب'],
+         ['حرج','crit','< '+nf(TH.danger),'دون نصف المطلوب'],
+         ['متوسط 7 أيام — تصعيد','ser','< '+nf(TH.ma7esc),'مراجعة رسمية لخطة التعبئة'],
+         ['متوسط 7 أيام — إجراء تعاقدي','crit','< '+nf(TH.ma7act),'مراجعة الالتزام التعاقدي']]
+      .map(([t,k,v,w])=>`<div style="background:var(--surf);padding:14px">
+        <div style="display:flex;align-items:center;gap:7px;font-size:12.5px;font-weight:600;margin-bottom:5px"><i class="dot bg-${k==='ser'?'ser':k}" style="background:var(--${k==='ser'?'serious':k})"></i>${t}</div>
+        <div class="num" style="font-family:'Readex Pro';font-size:19px;letter-spacing:-.01em">${v} <span style="font-size:11px;color:var(--ink3);font-family:'IBM Plex Sans Arabic'">م/يوم</span></div>
+        <div style="font-size:11.5px;color:var(--ink2);margin-top:4px">${w}</div></div>`).join('')}
+    </div>
+    <div style="margin-top:16px"><div style="font-size:12.5px;font-weight:600;margin-bottom:8px">قواعد التصعيد المركّبة</div>
+    <ul style="margin:0;padding-inline-start:18px;font-size:12.5px;color:var(--ink2);line-height:1.9" class="num">
+      ${TH.rules.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></div>`;
+}
+
+function renderRisk(){
+  $('#critPath').innerHTML=D.criticalPath.map(c=>`
+    <div class="cpi${c.rank===1?' top':''}"><span class="rk">${c.rank}</span>
+      <div><h4>${esc(c.segment)}</h4>
+        <div class="meta num"><span>الخط ${esc(c.line)}</span><span>${nf(c.length)} متر</span></div>
+        <p>${esc(c.reason)}</p></div></div>`).join('');
+
+  $('#riskTable').innerHTML=`<thead><tr><th>الرمز</th><th style="min-width:230px">المخاطرة</th><th>الأثر</th><th>الاحتمال</th><th>الخطورة</th><th>المسؤول</th><th style="min-width:260px">الإجراء المضاد</th><th>الموعد</th></tr></thead><tbody>`+
+    D.risks.map(r=>{const k=r.severity>=20?'crit':r.severity>=15?'ser':r.severity>=10?'warn':'mute';
+    return `<tr><td class="n">${esc(r.id)}</td><td>${esc(r.title)}</td>
+    <td class="n">${r.impact_m?nf(r.impact_m)+' م<br>':''}<span style="color:var(--ink2)">${nf(r.impact_days)} يوم</span></td>
+    <td>${esc(r.probability)}</td>
+    <td><span class="pill p-${k}">${esc(r.severity_label||r.severity)}</span></td>
+    <td style="color:var(--ink2);font-size:12px">${esc(r.owner)}</td>
+    <td style="color:var(--ink2);font-size:12px">${esc(r.action)}</td>
+    <td class="n" style="font-size:12px">${esc(r.deadline)}</td></tr>`}).join('')+'</tbody>';
+
+  $('#indicators').innerHTML=D.indicators.map(i=>`<div class="indi">
+    <div class="t">${esc(i.name)}</div>
+    <div class="g num">${esc(String(i.target))} <small>${esc(i.unit)}</small></div>
+    <div class="w">${esc(i.why)}</div></div>`).join('');
+}
+
+function renderRecovery(){
+  const L=[['immediate','فورية — خلال 7 أيام','1'],['short','قصيرة المدى — أسبوعان','2'],['medium','متوسطة المدى — شهر','3']];
+  $('#recovery').innerHTML=L.map(([k,t,n])=>`
+    <div class="lvl"><span class="n">${n}</span>${t}</div>
+    <div class="rec" style="border:1px solid var(--line);border-radius:10px;overflow:hidden">
+      <div class="recrow h"><span>الإجراء</span><span>المالك</span><span>مقياس النجاح</span><span>الموعد</span></div>
+      ${(D.recovery[k]||[]).map(a=>`<div class="recrow">
+        <span class="a">${esc(a.action)}</span><span class="o">${esc(a.owner)}</span>
+        <span class="m">${esc(a.metric)}</span><span class="d">${esc(a.deadline)}</span></div>`).join('')}
+    </div>`).join('');
+}
+
+function renderSegments(){
+  const stages=[...new Set(D.segments.map(s=>s.sg))];
+  $('#fStage').innerHTML='<option value="">الكل</option>'+stages.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('');
+  const draw=()=>{
+    const q=$('#fSearch').value.trim(), st=$('#fStage').value, pm=$('#fPermit').value, dp=$('#fDepth').value, so=$('#fSort').value;
+    let rows=D.segments.filter(s=>!s.ed);
+    if(q)rows=rows.filter(s=>s.st.includes(q)||s.ln.includes(q));
+    if(st)rows=rows.filter(s=>s.sg===st);
+    if(pm)rows=rows.filter(s=>pm==='yes'?s.pm:!s.pm);
+    if(dp)rows=rows.filter(s=>dp==='deep'?s.dm>2.5:s.dm<=2.5);
+    rows.sort((a,b)=>b[so]-a[so]);
+    const tot=rows.reduce((s,r)=>s+r.m,0), te=rows.reduce((s,r)=>s+r.eqm,0);
+    $('#segCount').textContent=`${rows.length} قطاعاً · ${nf(tot)} متراً · ${nf(te)} متراً مكافئاً`;
+    $('#segTable').innerHTML=`<thead><tr><th>الشارع</th><th>الخط</th><th>الطول</th><th>العمق</th><th>معامل الصعوبة</th><th>أمتار مكافئة</th><th>المرحلة</th><th>التشغيل</th><th>التصريح</th></tr></thead><tbody>`+
+      rows.map(s=>{const deep=s.dm>2.5;
+      return `<tr><td>${esc(s.st)}</td><td class="n">${esc(s.ln)}</td><td class="n" style="font-weight:600">${nf(s.m,1)}</td>
+      <td class="n">${esc(s.dp)}${deep?' <span class="pill p-crit">عميق</span>':''}</td>
+      <td class="n">${nf(s.f,2)}×</td><td class="n">${nf(s.eqm,0)}</td>
+      <td><span class="pill ${s.sg==='لم يتم البدء'?'p-crit':s.sg==='تجهيز موقع'?'p-ser':'p-warn'}">${esc(s.sg)}</span></td>
+      <td><span class="pill ${s.ss==='جاري'?'p-good':'p-mute'}">${esc(s.ss)}</span></td>
+      <td><span class="pill ${s.pm?'p-good':'p-crit'}">${s.pm?'صادر':'لا يوجد'}</span></td></tr>`}).join('')+'</tbody>';
+  };
+  ['#fSearch','#fStage','#fPermit','#fDepth','#fSort'].forEach(s=>$(s).addEventListener('input',draw));
+  draw();
+}
+
+/* ---------- render orchestration ---------- */
+function renderCharts(){try{renderSCurve();renderDaily()}catch(e){}}
+function renderLive(){renderKPIs();renderInsights();renderPerm();renderLog();renderCharts()}
+
+/* ---------- storage ----------
+   الصفحة تعمل في وضعين:
+   1) "live"   — داخل Claude: مخزن مشترك، كل قيد يظهر لكل من يفتح الصفحة فوراً.
+   2) "shared" — نسخة المشاركة العامة: تقرأ السجل المعتمَد من data/daily.json،
+                 والقيود الجديدة تُحفظ في متصفح صاحبها فقط حتى تُعتمد مركزياً. */
+let MODE='boot', LOCAL_KEY='khrj-p2-local-log';
+function setDbState(t,tone){
+  const el=$('#dbState'); el.textContent=t;
+  el.style.color=tone==='bad'?'var(--crit)':tone==='warn'?'var(--warn)':'var(--ink3)';
+}
+function loadLocal(){
+  try{const raw=localStorage.getItem(LOCAL_KEY); if(!raw)return 0;
+    const j=JSON.parse(raw); let n=0;
+    Object.values(j||{}).forEach(e=>{if(e&&e.d){LOG[e.d]={...e,local:true};n++}});
+    return n;
+  }catch(e){return 0}
+}
+function saveLocal(rec){
+  try{const raw=localStorage.getItem(LOCAL_KEY);
+    const j=raw?JSON.parse(raw):{}; j[rec.d]=rec;
+    localStorage.setItem(LOCAL_KEY,JSON.stringify(j)); return true;
+  }catch(e){return false}
+}
+function localEntries(){return entries().filter(e=>e.local)}
+
+async function initStore(){
+  setDbState('جارٍ الاتصال بمخزن البيانات…');
+  let d=null;
+  try{ d=await claude.use('db') }catch(e){}
+  if(d){
+    db=d; MODE='live';
+    try{
+      db.collection('daily').onSnapshot(snap=>{
+        const docs=snap.docs||snap||[];
+        docs.forEach(doc=>{const v=doc.data?doc.data():doc; if(v&&v.d)LOG[v.d]={d:v.d,m:+v.m||0,cr:v.cr,fr:v.fr,pm:v.pm,n:v.n||''}});
+        setDbState('محفوظ ومتزامن مع الفريق · '+Object.keys(LOG).length+' يوماً مسجّلاً');
+        renderLive();
+      },err=>setDbState('تعذّرت المزامنة — الأرقام معروضة من آخر نسخة محمّلة','bad'));
+    }catch(e){ setDbState('تعذّر فتح المخزن','bad') }
+    renderLive(); return;
+  }
+  /* وضع المشاركة العامة */
+  MODE='shared'; db=null;
+  let asOf=null, loaded=0;
+  try{
+    const r=await fetch('data/daily.json',{cache:'no-store'});
+    if(r.ok){
+      const j=await r.json();
+      (j.daily||[]).forEach(e=>{ if(e&&e.d){LOG[e.d]={d:e.d,m:+e.m||0,cr:e.cr,fr:e.fr,pm:e.pm,n:e.n||''};loaded++} });
+      asOf=j.updated||null;
+    }
+  }catch(e){}
+  const nLocal=loadLocal();
+  if(!loaded){ loaded=entries().filter(e=>!e.local).length; asOf=asOf||M.logUpdated; }
+  setDbState(
+    `السجل المعتمَد محدَّث حتى ${asOf?fd(asOf):'—'} · ${loaded} يوماً`
+    + (nLocal?` · ${nLocal} قيداً محفوظاً في هذا المتصفح فقط`:''),
+    nLocal?'warn':'ok');
+  showShareBanner();
+  renderLive();
+}
+function showShareBanner(){
+  if($('#shareBanner'))return;
+  const el=document.createElement('div');
+  el.id='shareBanner'; el.className='callout';
+  el.style.cssText='margin-bottom:14px;border-inline-start-color:var(--warn)';
+  el.innerHTML=`<b>نسخة المشاركة.</b> الأرقام المعروضة هي السجل المعتمَد للمشروع. أي قيد تسجّله هنا يُحفظ في متصفحك أنت فقط ولا يظهر لبقية الفريق — استخدم زر «نسخ القيود» ثم أرسلها لمدير المشروع لاعتمادها مركزياً.
+    <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+      <button class="ghost" id="copyBtn" type="button">نسخ القيود المحفوظة محلياً</button>
+      <button class="ghost" id="clearBtn" type="button">مسح قيودي المحلية</button>
+    </div>`;
+  $('#insightCard').parentNode.insertBefore(el,$('#insightCard'));
+  $('#copyBtn').addEventListener('click',async()=>{
+    const rows=localEntries().map(({local,...r})=>r);
+    if(!rows.length){$('#copyBtn').textContent='لا توجد قيود محلية';setTimeout(()=>$('#copyBtn').textContent='نسخ القيود المحفوظة محلياً',1800);return}
+    const txt=JSON.stringify(rows,null,1);
+    try{ await navigator.clipboard.writeText(txt); $('#copyBtn').textContent='✓ نُسخت '+rows.length+' قيود'; }
+    catch(e){ window.prompt('انسخ النص التالي وأرسله لمدير المشروع:',txt); $('#copyBtn').textContent='نسخ القيود المحفوظة محلياً'; return }
+    setTimeout(()=>$('#copyBtn').textContent='نسخ القيود المحفوظة محلياً',2200);
+  });
+  $('#clearBtn').addEventListener('click',()=>{
+    try{localStorage.removeItem(LOCAL_KEY)}catch(e){}
+    localEntries().forEach(e=>delete LOG[e.d]);
+    renderLive(); $('#clearBtn').textContent='✓ مُسحت';
+    setTimeout(()=>$('#clearBtn').textContent='مسح قيودي المحلية',1800);
+  });
+}
+
+async function save(){
+  const d=$('#inDate').value; if(!d){$('#saveMsg').textContent='اختر التاريخ أولاً';return}
+  const rec={d,m:+($('#inM').value||0),cr:+($('#inCrews').value||0)||null,fr:+($('#inFronts').value||0)||null,
+             pm:+($('#inPerm').value||0)||0,n:$('#inNote').value.trim(),at:Date.now()};
+  $('#saveBtn').disabled=true; $('#saveMsg').textContent='جارٍ الحفظ…';
+  if(MODE==='live'&&db){
+    LOG[d]={...rec}; renderLive();
+    try{ await db.doc('daily/'+d).set(rec);
+      $('#saveMsg').innerHTML='<span class="pill p-good">✓</span> حُفظ قيد '+fd(d)+' وظهر للفريق';
+      ['#inM','#inCrews','#inFronts','#inPerm','#inNote'].forEach(s=>$(s).value='');
+      $('#inDate').value=addD(d,1);
+    }catch(e){
+      const c=e&&e.code;
+      $('#saveMsg').textContent=(c==='not_granted'||c==='capability_disabled')
+        ?'لا تملك صلاحية الكتابة على هذه الصفحة':'تعذّر الحفظ — أعد المحاولة بعد لحظات';
+    }
+  }else{
+    LOG[d]={...rec,local:true};
+    const ok=saveLocal(rec); renderLive();
+    $('#saveMsg').innerHTML=ok
+      ? '<span class="pill p-warn">✓</span> حُفظ في هذا المتصفح فقط — أرسله لمدير المشروع لاعتماده'
+      : 'تعذّر الحفظ في المتصفح — انسخ الرقم وأرسله يدوياً';
+    ['#inM','#inCrews','#inFronts','#inPerm','#inNote'].forEach(s=>$(s).value='');
+    $('#inDate').value=addD(d,1);
+  }
+  $('#saveBtn').disabled=false;
+}
+$('#saveBtn').addEventListener('click',save);
+$('#inNote').addEventListener('keydown',e=>{if(e.key==='Enter')save()});
+
+/* ---------- boot ---------- */
+renderForecast(); renderRisk(); renderRecovery(); renderSegments(); renderLive();
+setDbState('جارٍ التحميل…');
+initStore();
+addEventListener('resize',()=>requestAnimationFrame(renderCharts));
+})();
+</script>
+</body></html>
